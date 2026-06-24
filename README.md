@@ -1,5 +1,11 @@
 # KernelArena Finding: RoPE + KV-Cache Write Fusion v0
 
+```
+Status: narrow microbenchmark finding
+Scope:  NVIDIA RTX 4090, contract_oracle, selected layouts
+Not:    serving benchmark · production vLLM path · FlashInfer comparison
+```
+
 Date: 2026-06-24
 
 ## Summary
@@ -137,4 +143,14 @@ KernelArena has RTX 4090 contract-oracle evidence that a fused Triton
 K-RoPE + KV-cache-write kernel beats decomposed vLLM RoPE + contract write and
 Inductor RoPE + contract write on selected vLLM-cache-contract rows. This is a
 microbenchmark finding, not a full serving or production vLLM cache-path claim.
+```
+
+## How to Cite
+
+If you reference this finding, cite this repository and the artifact manifest:
+
+```
+rafalwronapl. KernelArena Finding: RoPE + KV-Cache Write Fusion v0. 2026.
+https://github.com/rafalwronapl/kernelarena-rope-kv-fusion
+Artifact manifest: ARTIFACT_MANIFEST.md
 ```
