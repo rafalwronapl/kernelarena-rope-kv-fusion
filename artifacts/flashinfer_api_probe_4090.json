@@ -1,0 +1,159 @@
+{
+  "gpu": "NVIDIA GeForce RTX 4090",
+  "torch": "2.4.1+cu124",
+  "flashinfer": "0.6.12",
+  "classification_initial": "partial_comparable",
+  "reason_initial": "FlashInfer exposes separate RoPE functions and append_paged_kv_cache, but API probe did not find a direct fp16/bf16 fused RoPE+KV-cache-write function matching KernelArena contract semantics.",
+  "items": [
+    {
+      "name": "BatchDecodeMlaWithPagedKVCacheWrapper",
+      "signature": "(float_workspace_buffer: torch.Tensor, use_cuda_graph: bool = False, use_tensor_cores: bool = False, paged_kv_indptr_buffer: Optional[torch.Tensor] = None, paged_kv_indices_buffer: Optional[torch.Tensor] = None, paged_kv_last_page_len_buffer: Optional[torch.Tensor] = None) -> None",
+      "doc_first_line": "Warning: this class is deprecated and will be removed in a future release."
+    },
+    {
+      "name": "BatchDecodeWithPagedKVCacheWrapper",
+      "signature": "(float_workspace_buffer: torch.Tensor, kv_layout: str = 'NHD', use_cuda_graph: bool = False, use_tensor_cores: bool = False, paged_kv_indptr_buffer: Optional[torch.Tensor] = None, paged_kv_indices_buffer: Optional[torch.Tensor] = None, paged_kv_last_page_len_buffer: Optional[torch.Tensor] = None, backend: str = 'auto', jit_args: Optional[List[Any]] = None) -> None",
+      "doc_first_line": "Wrapper class for decode attention with paged kv-cache (first proposed in"
+    },
+    {
+      "name": "BatchDecodeWithSharedPrefixPagedKVCacheWrapper",
+      "signature": "(float_workspace_buffer: torch.Tensor, kv_layout: str = 'NHD') -> None",
+      "doc_first_line": "Wrapper class for decode attention with shared-prefix paged kv-cache for batch"
+    },
+    {
+      "name": "BatchPODWithPagedKVCacheWrapper",
+      "signature": "(float_workspace_buffer: torch.Tensor, kv_layout: str = 'NHD') -> None",
+      "doc_first_line": "Wrapper class for POD-Attention with paged kv-cache (first proposed in"
+    },
+    {
+      "name": "BatchPrefillWithPagedKVCacheWrapper",
+      "signature": "(float_workspace_buffer: torch.Tensor, kv_layout: str = 'NHD', use_cuda_graph: bool = False, qo_indptr_buf: Optional[torch.Tensor] = None, paged_kv_indptr_buf: Optional[torch.Tensor] = None, paged_kv_indices_buf: Optional[torch.Tensor] = None, paged_kv_last_page_len_buf: Optional[torch.Tensor] = None, custom_mask_buf: Optional[torch.Tensor] = None, mask_indptr_buf: Optional[torch.Tensor] = None, backend: str = 'auto', jit_args: Optional[List[Any]] = None, jit_kwargs: Optional[Dict[str, Any]] = None) -> None",
+      "doc_first_line": "Wrapper class for prefill/append attention with paged kv-cache for batch of"
+    },
+    {
+      "name": "BatchPrefillWithRaggedKVCacheWrapper",
+      "signature": "(float_workspace_buffer: torch.Tensor, kv_layout: str = 'NHD', use_cuda_graph: bool = False, qo_indptr_buf: Optional[torch.Tensor] = None, kv_indptr_buf: Optional[torch.Tensor] = None, custom_mask_buf: Optional[torch.Tensor] = None, mask_indptr_buf: Optional[torch.Tensor] = None, backend: str = 'auto', jit_args: Optional[List[Any]] = None, jit_kwargs: Optional[Dict[str, Any]] = None) -> None",
+      "doc_first_line": "Wrapper class for prefill/append attention with ragged (tensor) kv-cache for"
+    },
+    {
+      "name": "BatchPrefillWithSharedPrefixPagedKVCacheWrapper",
+      "signature": "(float_workspace_buffer: torch.Tensor, kv_layout: str = 'NHD') -> None",
+      "doc_first_line": "Wrapper class for prefill/append attention with shared-prefix paged kv-cache for"
+    },
+    {
+      "name": "CUDAGraphBatchDecodeWithPagedKVCacheWrapper",
+      "signature": "(workspace_buffer: torch.Tensor, indptr_buffer: torch.Tensor, indices_buffer: torch.Tensor, last_page_len_buffer: torch.Tensor, kv_layout: str = 'NHD', use_tensor_cores: bool = False) -> None",
+      "doc_first_line": "CUDAGraph-compatible Wrapper class for decode attention with paged kv-cache (first"
+    },
+    {
+      "name": "PODWithPagedKVCacheWrapper",
+      "signature": "(float_workspace_buffer: torch.Tensor, kv_layout: str = 'NHD', use_cuda_graph: bool = False, paged_kv_indptr_buffer: Optional[torch.Tensor] = None, paged_kv_indices_buffer: Optional[torch.Tensor] = None, paged_kv_last_page_len_buffer: Optional[torch.Tensor] = None, jit_args: Optional[List[Any]] = None) -> None",
+      "doc_first_line": "Wrapper class for POD-Attention with paged kv-cache (first proposed in"
+    },
+    {
+      "name": "__cached__",
+      "signature": "ERROR:TypeError:'/workspace/ka-flashinfer-env/lib/python3.11/site-packages/flashinfer/__pycache__/__init__.cpython-311.pyc' is not a cal",
+      "doc_first_line": "str(object='') -> str"
+    },
+    {
+      "name": "append_paged_kv_cache",
+      "signature": "(append_key: torch.Tensor, append_value: torch.Tensor, batch_indices: torch.Tensor, positions: torch.Tensor, paged_kv_cache: Union[torch.Tensor, Tuple[torch.Tensor, torch.Tensor]], kv_indices: torch.Tensor, kv_indptr: torch.Tensor, kv_last_page_len: torch.Tensor, kv_layout: str = 'NHD') -> None",
+      "doc_first_line": "Append a batch of key-value pairs to a paged key-value cache."
+    },
+    {
+      "name": "append_paged_mla_kv_cache",
+      "signature": "(append_ckv: torch.Tensor, append_kpe: torch.Tensor, batch_indices: torch.Tensor, positions: torch.Tensor, ckv_cache: Optional[torch.Tensor], kpe_cache: Optional[torch.Tensor], kv_indices: torch.Tensor, kv_indptr: torch.Tensor, kv_last_page_len: torch.Tensor) -> None",
+      "doc_first_line": "Append a batch of key-value pairs to a paged key-value cache,"
+    },
+    {
+      "name": "apply_llama31_rope",
+      "signature": "(q: torch.Tensor, k: torch.Tensor, indptr: torch.Tensor, offsets: torch.Tensor, rotary_dim: Optional[int] = None, interleave: bool = False, rope_scale: float = 8, rope_theta: float = 500000.0, low_freq_factor: float = 1, high_freq_factor: float = 4, old_context_len: int = 8192) -> Tuple[torch.Tensor, torch.Tensor]",
+      "doc_first_line": "Apply Llama 3.1 style rotary embedding to a batch of queries/keys (stored as"
+    },
+    {
+      "name": "apply_llama31_rope_inplace",
+      "signature": "(q: torch.Tensor, k: torch.Tensor, indptr: torch.Tensor, offsets: torch.Tensor, rotary_dim: Optional[int] = None, interleave: bool = False, rope_scale: float = 8, rope_theta: float = 500000.0, low_freq_factor: float = 1, high_freq_factor: float = 4, old_context_len: int = 8192) -> None",
+      "doc_first_line": "Apply Llama 3.1 style rotary embedding to a batch of queries/keys (stored as"
+    },
+    {
+      "name": "apply_llama31_rope_pos_ids",
+      "signature": "(q: torch.Tensor, k: torch.Tensor, pos_ids: torch.Tensor, rotary_dim: Optional[int] = None, interleave: bool = False, rope_scale: float = 8, rope_theta: float = 500000.0, low_freq_factor: float = 1, high_freq_factor: float = 4, old_context_len: int = 8192) -> Tuple[torch.Tensor, torch.Tensor]",
+      "doc_first_line": "Apply Llama 3.1 style rotary embedding to a batch of queries/keys (stored as"
+    },
+    {
+      "name": "apply_llama31_rope_pos_ids_inplace",
+      "signature": "(q: torch.Tensor, k: torch.Tensor, pos_ids: torch.Tensor, rotary_dim: Optional[int] = None, interleave: bool = False, rope_scale: float = 8, rope_theta: float = 500000.0, low_freq_factor: float = 1, high_freq_factor: float = 4, old_context_len: int = 8192) -> None",
+      "doc_first_line": "Apply Llama 3.1 style rotary embedding to a batch of queries/keys (stored as"
+    },
+    {
+      "name": "apply_rope",
+      "signature": "(q: torch.Tensor, k: torch.Tensor, indptr: torch.Tensor, offsets: torch.Tensor, rotary_dim: Optional[int] = None, interleave: bool = False, rope_scale: float = 1, rope_theta: float = 10000.0) -> Tuple[torch.Tensor, torch.Tensor]",
+      "doc_first_line": "Apply rotary embedding to a batch of queries/keys (stored as RaggedTensor)."
+    },
+    {
+      "name": "apply_rope_inplace",
+      "signature": "(q: torch.Tensor, k: torch.Tensor, indptr: torch.Tensor, offsets: torch.Tensor, rotary_dim: Optional[int] = None, interleave: bool = False, rope_scale: float = 1, rope_theta: float = 10000.0) -> None",
+      "doc_first_line": "Apply rotary embedding to a batch of queries/keys (stored as RaggedTensor) inplace."
+    },
+    {
+      "name": "apply_rope_pos_ids",
+      "signature": "(q: torch.Tensor, k: torch.Tensor, pos_ids: torch.Tensor, rotary_dim: Optional[int] = None, interleave: bool = False, rope_scale: float = 1, rope_theta: float = 10000.0) -> Tuple[torch.Tensor, torch.Tensor]",
+      "doc_first_line": "Apply rotary embedding to a batch of queries/keys (stored as RaggedTensor)."
+    },
+    {
+      "name": "apply_rope_pos_ids_inplace",
+      "signature": "(q: torch.Tensor, k: torch.Tensor, pos_ids: torch.Tensor, rotary_dim: Optional[int] = None, interleave: bool = False, rope_scale: float = 1, rope_theta: float = 10000.0) -> None",
+      "doc_first_line": "Apply rotary embedding to a batch of queries/keys (stored as RaggedTensor) inplace."
+    },
+    {
+      "name": "apply_rope_with_cos_sin_cache",
+      "signature": "(positions: torch.Tensor, query: torch.Tensor, key: torch.Tensor, head_size: int, cos_sin_cache: torch.Tensor, is_neox: bool = True) -> Tuple[torch.Tensor, torch.Tensor]",
+      "doc_first_line": "Apply rotary embedding to keys and queries with precomputed cos/sin values."
+    },
+    {
+      "name": "apply_rope_with_cos_sin_cache_inplace",
+      "signature": "(positions: torch.Tensor, query: torch.Tensor, key: torch.Tensor, head_size: int, cos_sin_cache: torch.Tensor, is_neox: bool = True) -> None",
+      "doc_first_line": "Apply rotary embedding to keys and queries with precomputed cos/sin values."
+    },
+    {
+      "name": "cudnn_batch_decode_with_kv_cache",
+      "signature": "(q: torch.Tensor, k_cache: torch.Tensor, v_cache: torch.Tensor, scale: float, workspace_buffer: torch.Tensor, *, max_sequence_kv: int, actual_seq_lens_kv: Optional[torch.Tensor] = None, block_tables: Optional[torch.Tensor] = None, is_cuda_graph_compatible: bool = False, batch_offsets_q: Optional[torch.Tensor] = None, batch_offsets_o: Optional[torch.Tensor] = None, batch_offsets_k: Optional[torch.Tensor] = None, batch_offsets_v: Optional[torch.Tensor] = None, out: Optional[torch.Tensor] = None) -> torch.Tensor",
+      "doc_first_line": "Performs batched decode attention with paged KV cache using cuDNN."
+    },
+    {
+      "name": "nvfp4_kv_dequantize",
+      "signature": "(fp4_data: torch.Tensor, block_scales: torch.Tensor, global_scale: torch.Tensor, output_dtype: torch.dtype = torch.bfloat16) -> torch.Tensor",
+      "doc_first_line": "GPU dequantization of NVFP4 KV cache data with linear block scale layout."
+    },
+    {
+      "name": "nvfp4_kv_quantize",
+      "signature": "(input: torch.Tensor, global_scale: torch.Tensor) -> Tuple[torch.Tensor, torch.Tensor]",
+      "doc_first_line": "GPU quantization to NVFP4 KV cache format with linear block scale layout."
+    },
+    {
+      "name": "nvfp4_quantize_paged_kv_cache",
+      "signature": "(k_cache: torch.Tensor, v_cache: torch.Tensor, kv_layout: str = 'HND', k_global_sf: Optional[torch.Tensor] = None, v_global_sf: Optional[torch.Tensor] = None) -> Tuple[Tuple[torch.Tensor, torch.Tensor], Tuple[torch.Tensor, torch.Tensor], float, float]",
+      "doc_first_line": "Quantize paged KV cache to NVFP4 format for trtllm-gen MHA."
+    },
+    {
+      "name": "rope",
+      "signature": "ERROR:TypeError:<module 'flashinfer.rope' from '/workspace/ka-flashinfer-env/lib/python3.11/site-packages/flashinfer/rope.py'> is not a ",
+      "doc_first_line": "Copyright (c) 2024 by FlashInfer team."
+    },
+    {
+      "name": "single_decode_with_kv_cache",
+      "signature": "(q: torch.Tensor, k: torch.Tensor, v: torch.Tensor, kv_layout: str = 'NHD', pos_encoding_mode: str = 'NONE', use_tensor_cores: bool = False, q_scale: Optional[float] = None, k_scale: Optional[float] = None, v_scale: Optional[float] = None, window_left: int = -1, logits_soft_cap: Optional[float] = None, sm_scale: Optional[float] = None, rope_scale: Optional[float] = None, rope_theta: Optional[float] = None, return_lse: bool = False) -> Union[torch.Tensor, Tuple[torch.Tensor, torch.Tensor]]",
+      "doc_first_line": "Decode attention with KV Cache for single request, return attention output."
+    },
+    {
+      "name": "single_prefill_with_kv_cache",
+      "signature": "(q: torch.Tensor, k: torch.Tensor, v: torch.Tensor, scale_q: Optional[torch.Tensor] = None, scale_k: Optional[torch.Tensor] = None, scale_v: Optional[torch.Tensor] = None, o_dtype: Optional[torch.dtype] = None, custom_mask: Optional[torch.Tensor] = None, packed_custom_mask: Optional[torch.Tensor] = None, causal: bool = False, kv_layout: str = 'NHD', pos_encoding_mode: str = 'NONE', use_fp16_qk_reduction: bool = False, sm_scale: Optional[float] = None, window_left: int = -1, logits_soft_cap: Optional[float] = None, rope_scale: Optional[float] = None, rope_theta: Optional[float] = None, backend: str = 'auto', return_lse: bool = False, kv_cache_sf: Optional[Tuple[torch.Tensor, torch.Tensor]] = None, k_scale: Optional[float] = None, v_scale: Optional[float] = None) -> Union[torch.Tensor, Tuple[torch.Tensor, torch.Tensor]]",
+      "doc_first_line": "Prefill/Append attention with KV cache for single request, return the attention"
+    },
+    {
+      "name": "single_prefill_with_kv_cache_return_lse",
+      "signature": "(q: torch.Tensor, k: torch.Tensor, v: torch.Tensor, scale_q: Optional[torch.Tensor] = None, scale_k: Optional[torch.Tensor] = None, scale_v: Optional[torch.Tensor] = None, o_dtype: Optional[torch.dtype] = None, custom_mask: Optional[torch.Tensor] = None, packed_custom_mask: Optional[torch.Tensor] = None, causal: bool = False, kv_layout: str = 'NHD', pos_encoding_mode: str = 'NONE', use_fp16_qk_reduction: bool = False, sm_scale: Optional[float] = None, window_left: int = -1, logits_soft_cap: Optional[float] = None, rope_scale: Optional[float] = None, rope_theta: Optional[float] = None, backend: str = 'auto', *, return_lse: bool = True, kv_cache_sf: Optional[Tuple[torch.Tensor, torch.Tensor]] = None, k_scale: Optional[float] = None, v_scale: Optional[float] = None) -> Union[torch.Tensor, Tuple[torch.Tensor, torch.Tensor]]",
+      "doc_first_line": "partial(func, *args, **keywords) - new function with partial application"
+    }
+  ]
+}

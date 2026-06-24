@@ -1,0 +1,24 @@
+{
+  "benchmark": "rope_flashinfer_compare_4090",
+  "gpu": "NVIDIA GeForce RTX 4090",
+  "torch": "2.4.1+cu124",
+  "flashinfer": "0.6.12",
+  "classification": "partial_comparable",
+  "benchmark_ran": false,
+  "reason": "FlashInfer 0.6.12 exposes separate fp16/bf16-capable RoPE functions and append_paged_kv_cache, plus a fused rope_quantize_fp8_append_paged_kv_cache path. The fused path is FP8/quantized and includes Q/K/nope inputs, so it is not a direct semantic match for KernelArena fp16/bf16 K-RoPE + KV-cache-write contract rows. A latency comparison would be misleading without a separate FP8/MLA-specific benchmark.",
+  "direct_match_found": false,
+  "usable_partial_apis": [
+    "append_paged_kv_cache",
+    "apply_rope",
+    "apply_rope_inplace",
+    "apply_rope_with_cos_sin_cache",
+    "apply_rope_with_cos_sin_cache_inplace"
+  ],
+  "non_direct_fused_apis": [],
+  "claim_boundary": [
+    "FlashInfer API compatibility probe only",
+    "No FlashInfer speedup/win/loss claim",
+    "No attention-kernel comparison",
+    "No FP8 result compared against fp16/bf16 contract rows"
+  ]
+}

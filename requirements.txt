@@ -1,0 +1,7 @@
+# Tested stack for rope_kv_cache_fusion_v0
+# See REPRO.md for full setup instructions.
+vllm==0.9.2
+torch==2.7.0
+triton>=3.3.0
+torchaudio==2.7.0
+torchvision==0.22.0
