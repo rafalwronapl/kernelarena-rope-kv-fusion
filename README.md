@@ -100,20 +100,23 @@ RTX 3090 real-cache-writer CUDA Graph follow-up:
 rows=8
 path_correct=8/8
 baseline_path_correct=8/8
+graph_correct=8/8
+graph_baseline_correct=8/8
 max k diff: 0.03125
 max v diff: 0.0
+max graph fused k diff: 0.03125
+max graph fused v diff: 0.0
 oracle: real_vllm_oracle
 baseline: local RoPE reference + real torch.ops._C_cache_ops.reshape_and_cache
-eager speedup: min 4.8617x, median 4.9337x, max 6.5448x
-CUDA Graph replay speedup: min 2.8578x, median 3.1735x, max 3.6700x
+eager speedup: min 4.5653x, median 4.7558x, max 5.4186x
+CUDA Graph replay speedup: min 2.8665x, median 4.5357x, max 4.8497x
 ```
 
 Interpretation: the CUDA Graph baseline mismatch is fixed for decode on RTX
-3090, and the rerun includes cache correctness fields for the same fused and
-baseline paths that are graph-captured. The current artifact does not separately
-validate cache contents after CUDA Graph replay; the script has been updated for
-that next rerun. The remaining caveat is RoPE-provider contamination: baseline
-RoPE is a local tensor reference, not vLLM `RotaryEmbedding.forward_cuda`.
+3090, and the post-replay rerun validates cache contents after CUDA Graph replay
+for both the fused path and the baseline. The remaining caveat is RoPE-provider
+contamination: baseline RoPE is a local tensor reference, not vLLM
+`RotaryEmbedding.forward_cuda`.
 
 ## RoPE Provider Split
 
@@ -182,6 +185,8 @@ artifacts/cudagraph_4090_rope_cudagraph_decode_summary.json
 artifacts/real_vllm_cudagraph_decode_summary_3090.json
 artifacts/real_vllm_cudagraph_decode_summary_3090_correctness.json
 artifacts/real_vllm_cudagraph_decode_3090_correctness.log
+artifacts/real_vllm_cudagraph_decode_summary_3090_postreplay.json
+artifacts/real_vllm_cudagraph_decode_3090_postreplay.log
 artifacts/rope_provider_split_3090.json
 artifacts/results_real_vllm_contract_4090_2026-06-25.zip
 artifacts/results_cudagraph_decode_4090_2026-06-25.zip
@@ -202,12 +207,11 @@ VLLM_ISSUE_COMMENT.md
 KernelArena has RTX 4090 microbenchmark evidence that a fused Triton
 K-RoPE + KV-cache-write kernel beats vLLM's real CUDA `reshape_and_cache` cache
 writer on selected paged-cache layouts. A follow-up RTX 3090 decode benchmark
-using real `reshape_and_cache` includes 8/8 path correctness for the captured
-fused and baseline paths, and retains 2.8578x-3.6700x CUDA Graph replay speedup.
-Post-replay cache correctness is prepared in the script but needs a new GPU
-rerun before it is cited. Prefill numbers are RoPE-provider contaminated and
-should not be framed as pure fusion benefit. This is a kernel microbenchmark,
-not a full vLLM serving-speedup claim.
+using real `reshape_and_cache` includes 8/8 path correctness and 8/8 post-replay
+CUDA Graph cache correctness for the fused and baseline paths, retaining
+2.8665x-4.8497x CUDA Graph replay speedup. Prefill numbers are RoPE-provider
+contaminated and should not be framed as pure fusion benefit. This is a kernel
+microbenchmark, not a full vLLM serving-speedup claim.
 ```
 
 ## How to Cite

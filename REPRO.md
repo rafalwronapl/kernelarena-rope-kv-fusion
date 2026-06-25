@@ -114,7 +114,13 @@ oracle=real_vllm_oracle
 correct=8/8
 baseline_k_correct=8/8
 baseline_v_correct=8/8
+graph_correct=8/8
+graph_fused_k_correct=8/8
+graph_fused_v_correct=8/8
+graph_baseline_k_correct=8/8
+graph_baseline_v_correct=8/8
 k_max_abs_diff and v_max_abs_diff present for each row
+graph_*_max_abs_diff present for each row
 speedup_graph present for all rows
 ```
 
