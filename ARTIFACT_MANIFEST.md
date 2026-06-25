@@ -5,7 +5,7 @@ Generated locally. SHA256 hashes are for repository files and benchmark artifact
 | Path | Size bytes | SHA256 |
 |---|---:|---|
 | `artifacts/benchmark_rope_provider_split.py` | 3908 | `00643ab7dcc19b9d94a5076ce9b4b3b037a09ae3bd8404a965dcacfdb9b0ac4d` |
-| `artifacts/benchmark_rope_real_vllm_cudagraph_decode.py` | 7806 | `486376a1efa99a07725c03a7893272513bf5dbd9996ccdcfeb319e55c726bad3` |
+| `artifacts/benchmark_rope_real_vllm_cudagraph_decode.py` | 11250 | `6607e4f4ea48d1c369b8b5ecb38b7ff924bc12e1775eac8a4637928046c75558` |
 | `artifacts/cudagraph_4090_benchmark_rope_cudagraph_decode.py` | 21485 | `0a477b0fc222fe3de3db427a4ef1710c0b90248385742ec0524cbc8f6a35dc2b` |
 | `artifacts/cudagraph_4090_rope_cudagraph_decode_full.log` | 1067 | `39ad2413e35917393eec718f06df737cf86b1d81b3c1cd703354208c49ff85e1` |
 | `artifacts/cudagraph_4090_rope_cudagraph_decode_smoke.json` | 12545 | `073673829fba2460502c0e2d739239f2debfcb6158cdd1d927486ae7ef300317` |
@@ -39,11 +39,11 @@ Generated locally. SHA256 hashes are for repository files and benchmark artifact
 | `benchmark_rope_cudagraph_decode.py` | 21485 | `0a477b0fc222fe3de3db427a4ef1710c0b90248385742ec0524cbc8f6a35dc2b` |
 | `benchmark_rope_provider_split.py` | 3908 | `00643ab7dcc19b9d94a5076ce9b4b3b037a09ae3bd8404a965dcacfdb9b0ac4d` |
 | `benchmark_rope_real_vllm_contract.py` | 26515 | `5d85f62f4e8ccf1f1182e150d829a207c9934c8db271fe3a62d02d58717a2ba9` |
-| `benchmark_rope_real_vllm_cudagraph_decode.py` | 7806 | `486376a1efa99a07725c03a7893272513bf5dbd9996ccdcfeb319e55c726bad3` |
+| `benchmark_rope_real_vllm_cudagraph_decode.py` | 11250 | `6607e4f4ea48d1c369b8b5ecb38b7ff924bc12e1775eac8a4637928046c75558` |
 | `benchmark_rope_vllm_cache_contract.py` | 19510 | `e85f6eb5212d4486cc37ebcff7c0c568d0eb7d2edcccf149f58b2df1d36004dd` |
-| `CLAIMS.md` | 4297 | `d60a5ec612e1473a82bf8f9c5fa2df92b71ff1af4bd5b2adbd7a186d598773cc` |
+| `CLAIMS.md` | 4717 | `afd5f8d2075504f697eadb28db2ab2f7099e2e9ca64ad7cbace4b34a5f25c382` |
 | `LICENSE` | 8901 | `3f1914f1c5f30b762dfb64ed88b9411a9b5a813c5bb84d9d8309344ebacce506` |
-| `README.md` | 7160 | `8fbfca7636878ae9d6c84218682d58304c3378812658e83e424980975f8b3c35` |
+| `README.md` | 7561 | `72494abd20a029cae33a2f52f191bebf80eb2c978f6af1525f85af6b89e1beb0` |
 | `REPRO.md` | 3203 | `3512ca0fb04e1fccd25edaa18e805b24193ff23ae81e72a7658c2ecfcdaed262` |
 | `requirements.txt` | 164 | `c26ede4fd29788daf250812aa90261304b5ff40361268b0a62fd83205c937724` |
-| `VLLM_ISSUE_COMMENT.md` | 2469 | `74e92c7baecf8feae4a302116ce32b80c6e8f049e6f2506228c6cc7eb6c67c3a` |
+| `VLLM_ISSUE_COMMENT.md` | 2661 | `e4e0d8edebb91f5f56817d8e7b9dbd6dfb52b77ffe6e0aacd7e294260a6fda0c` |

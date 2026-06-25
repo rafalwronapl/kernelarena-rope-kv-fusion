@@ -94,12 +94,12 @@ The follow-up below is a CUDA Graph decode microbenchmark against vLLM's real
 `reshape_and_cache` cache writer. It is still not an end-to-end vLLM serving
 claim.
 
-RTX 3090 real-cache-writer CUDA Graph correctness rerun:
+RTX 3090 real-cache-writer CUDA Graph follow-up:
 
 ```text
 rows=8
-correct=8/8
-baseline_correct=8/8
+path_correct=8/8
+baseline_path_correct=8/8
 max k diff: 0.03125
 max v diff: 0.0
 oracle: real_vllm_oracle
@@ -109,8 +109,10 @@ CUDA Graph replay speedup: min 2.8578x, median 3.1735x, max 3.6700x
 ```
 
 Interpretation: the CUDA Graph baseline mismatch is fixed for decode on RTX
-3090, and the rerun includes cache correctness fields for both the fused path
-and the baseline. The remaining caveat is RoPE-provider contamination: baseline
+3090, and the rerun includes cache correctness fields for the same fused and
+baseline paths that are graph-captured. The current artifact does not separately
+validate cache contents after CUDA Graph replay; the script has been updated for
+that next rerun. The remaining caveat is RoPE-provider contamination: baseline
 RoPE is a local tensor reference, not vLLM `RotaryEmbedding.forward_cuda`.
 
 ## RoPE Provider Split
@@ -178,6 +180,8 @@ artifacts/real_vllm_4090_rope_real_vllm_contract_repeat2.json
 artifacts/real_vllm_4090_rope_real_vllm_contract_repeat3.json
 artifacts/cudagraph_4090_rope_cudagraph_decode_summary.json
 artifacts/real_vllm_cudagraph_decode_summary_3090.json
+artifacts/real_vllm_cudagraph_decode_summary_3090_correctness.json
+artifacts/real_vllm_cudagraph_decode_3090_correctness.log
 artifacts/rope_provider_split_3090.json
 artifacts/results_real_vllm_contract_4090_2026-06-25.zip
 artifacts/results_cudagraph_decode_4090_2026-06-25.zip
@@ -198,10 +202,12 @@ VLLM_ISSUE_COMMENT.md
 KernelArena has RTX 4090 microbenchmark evidence that a fused Triton
 K-RoPE + KV-cache-write kernel beats vLLM's real CUDA `reshape_and_cache` cache
 writer on selected paged-cache layouts. A follow-up RTX 3090 decode benchmark
-using real `reshape_and_cache` under CUDA Graph replay is correctness-backed
-across 8/8 selected rows and retains 2.8578x-3.6700x replay speedup. Prefill
-numbers are RoPE-provider contaminated and should not be framed as pure fusion
-benefit. This is a kernel microbenchmark, not a full vLLM serving-speedup claim.
+using real `reshape_and_cache` includes 8/8 path correctness for the captured
+fused and baseline paths, and retains 2.8578x-3.6700x CUDA Graph replay speedup.
+Post-replay cache correctness is prepared in the script but needs a new GPU
+rerun before it is cited. Prefill numbers are RoPE-provider contaminated and
+should not be framed as pure fusion benefit. This is a kernel microbenchmark,
+not a full vLLM serving-speedup claim.
 ```
 
 ## How to Cite

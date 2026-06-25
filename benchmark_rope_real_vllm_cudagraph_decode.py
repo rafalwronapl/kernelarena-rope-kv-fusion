@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import argparse
 import json
+import subprocess
 import time
 from pathlib import Path
 
@@ -22,6 +23,27 @@ from benchmark_rope_real_vllm_contract import (
 
 
 REPO_ROOT = Path(__file__).resolve().parent
+
+
+def optional_version(module_name: str) -> str | None:
+    try:
+        module = __import__(module_name)
+    except Exception:
+        return None
+    return getattr(module, "__version__", "unknown")
+
+
+def nvidia_driver_version() -> str | None:
+    try:
+        completed = subprocess.run(
+            ["nvidia-smi", "--query-gpu=driver_version", "--format=csv,noheader"],
+            check=True,
+            capture_output=True,
+            text=True,
+        )
+    except Exception:
+        return None
+    return completed.stdout.splitlines()[0].strip() if completed.stdout.splitlines() else None
 
 
 def format_ratio(value: float | None) -> str:
@@ -100,6 +122,14 @@ def run_case(case, warmup: int, repeats: int) -> dict[str, object]:
     graph_baseline_us = None
     graph_fused_us = None
     speedup_graph = None
+    graph_fused_k_correct = None
+    graph_fused_v_correct = None
+    graph_baseline_k_correct = None
+    graph_baseline_v_correct = None
+    graph_fused_k_diff = None
+    graph_fused_v_diff = None
+    graph_baseline_k_diff = None
+    graph_baseline_v_diff = None
     try:
         side_stream = torch.cuda.Stream()
         side_stream.wait_stream(torch.cuda.current_stream())
@@ -120,6 +150,36 @@ def run_case(case, warmup: int, repeats: int) -> dict[str, object]:
         graph_baseline_us = cuda_time_us(g_baseline.replay, 20, max(repeats, 200))
         graph_fused_us = cuda_time_us(g_fused.replay, 20, max(repeats, 200))
         speedup_graph = round(graph_baseline_us / graph_fused_us, 4)
+
+        g_baseline.replay()
+        g_fused.replay()
+        torch.cuda.synchronize()
+        graph_base_flat_k, graph_base_flat_v = vllm_layout_flat_views(k_cache_base, v_cache_base)
+        graph_fused_flat_k, graph_fused_flat_v = vllm_layout_flat_views(k_cache_fused, v_cache_fused)
+        graph_baseline_k_diff = (
+            graph_base_flat_k[slots_graph].float() - expected_k.float()
+        ).abs().max().item()
+        graph_baseline_v_diff = (
+            graph_base_flat_v[slots_graph].float() - v_graph.float()
+        ).abs().max().item()
+        graph_fused_k_diff = (
+            graph_fused_flat_k[slots_graph].float() - expected_k.float()
+        ).abs().max().item()
+        graph_fused_v_diff = (
+            graph_fused_flat_v[slots_graph].float() - v_graph.float()
+        ).abs().max().item()
+        graph_baseline_k_correct = torch.allclose(
+            graph_base_flat_k[slots_graph].float(), expected_k.float(), atol=2e-2, rtol=2e-2
+        )
+        graph_baseline_v_correct = torch.allclose(
+            graph_base_flat_v[slots_graph].float(), v_graph.float(), atol=2e-2, rtol=2e-2
+        )
+        graph_fused_k_correct = torch.allclose(
+            graph_fused_flat_k[slots_graph].float(), expected_k.float(), atol=2e-2, rtol=2e-2
+        )
+        graph_fused_v_correct = torch.allclose(
+            graph_fused_flat_v[slots_graph].float(), v_graph.float(), atol=2e-2, rtol=2e-2
+        )
     except Exception as exc:
         graph_error = repr(exc)
         torch.cuda.synchronize()
@@ -141,8 +201,19 @@ def run_case(case, warmup: int, repeats: int) -> dict[str, object]:
         "v_correct": bool(v_correct),
         "baseline_k_correct": bool(baseline_k_correct),
         "baseline_v_correct": bool(baseline_v_correct),
+        "graph_correct": None
+        if graph_fused_k_correct is None
+        else bool(graph_fused_k_correct and graph_fused_v_correct and graph_baseline_k_correct and graph_baseline_v_correct),
+        "graph_fused_k_correct": None if graph_fused_k_correct is None else bool(graph_fused_k_correct),
+        "graph_fused_v_correct": None if graph_fused_v_correct is None else bool(graph_fused_v_correct),
+        "graph_baseline_k_correct": None if graph_baseline_k_correct is None else bool(graph_baseline_k_correct),
+        "graph_baseline_v_correct": None if graph_baseline_v_correct is None else bool(graph_baseline_v_correct),
         "k_max_abs_diff": k_diff,
         "v_max_abs_diff": v_diff,
+        "graph_fused_k_max_abs_diff": graph_fused_k_diff,
+        "graph_fused_v_max_abs_diff": graph_fused_v_diff,
+        "graph_baseline_k_max_abs_diff": graph_baseline_k_diff,
+        "graph_baseline_v_max_abs_diff": graph_baseline_v_diff,
         "eager_baseline_us": round(eager_baseline_us, 3),
         "eager_fused_us": round(eager_fused_us, 3),
         "speedup_eager": round(eager_baseline_us / eager_fused_us, 4),
@@ -179,6 +250,11 @@ def main() -> None:
         "stack": {
             "gpu": torch.cuda.get_device_name(0),
             "torch": torch.__version__,
+            "triton": optional_version("triton"),
+            "vllm": optional_version("vllm"),
+            "cuda": torch.version.cuda,
+            "driver": nvidia_driver_version(),
+            "device_capability": list(torch.cuda.get_device_capability(0)),
         },
         "rows": rows,
         "elapsed_s": round(time.time() - started, 3),
