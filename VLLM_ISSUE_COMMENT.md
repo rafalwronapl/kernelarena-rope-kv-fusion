@@ -1,50 +1,48 @@
 # Draft Comment For vLLM Issue #24678
 
-Hi, this issue matches a narrow fusion lane we have been testing in
-KernelArena.
+I have a small NVIDIA/Triton microbenchmark artifact that may be relevant to
+`ROPE + KV-Cache-Write + pre-attn prepare-ops fusion`.
 
-I saw that vLLM now documents a `rope_kvcache_fusion` pass, with the stable
-fusion docs describing RoPE + KV-cache update fusion as ROCm/AITER-only rather
-than NVIDIA CUDA. This note is therefore specifically about a small
-NVIDIA/Triton microbenchmark prototype, not a claim that vLLM has no work in
-this area.
+Scope first: this is not an end-to-end vLLM serving benchmark and not a claim
+that vLLM has no related work. It is a selected-layout kernel microbenchmark for
+K RoPE + KV-cache write on RTX 4090.
 
-The prototype covers the narrower:
-
-```text
-K RoPE + KV-cache write
-```
-
-part of the broader `ROPE + KV-Cache-Write + pre-attn prepare-ops fusion`
-problem.
-
-Latest contract-oracle result (prefill only — see note below):
+Stack:
 
 ```text
 RTX 4090
 vLLM 0.9.2 / torch 2.7.0+cu126 / triton 3.3.0
-prefill cases only (8/16 rows)
-fused vs vLLM RoPE + contract write: prefill median 1.6810x
-robust median all rows excluding >5x outliers: 1.8125x
-oracle=contract_oracle
+cache writer baseline: torch.ops._C_cache_ops.reshape_and_cache from vllm._C
+RoPE provider in this run: local reference fallback
 ```
 
-**Note on decode results:** decode cases (small batches, 1 token/sequence) show
-higher raw speedups but these are dominated by kernel launch overhead, not compute.
-Under CUDA Graphs (which production vLLM uses for decode), launch overhead is
-amortized and these margins likely do not survive. We are not reporting decode
-as a headline number for this reason.
+Result summary:
 
-Prefill at large context lengths is compute-bounded and is the honest headline:
-~1.5-1.7x for sequences of 1k-8k tokens.
+```text
+real vLLM cache writer run:
+rows=16, correct=16/16
+prefill: min 1.6572x, median 1.9319x, max 2.2122x vs real reshape_and_cache path
+decode:  min 3.9782x, median 4.3409x, max 4.6780x vs real reshape_and_cache path
 
-This is not an end-to-end serving benchmark and not a production vLLM cache-path
-claim. It is a selected-layout NVIDIA/Triton contract microbenchmark for the
-prefill RoPE + cache-write subproblem.
+CUDA Graph decode run:
+rows=8, correct=8/8
+CUDA Graph replay speedup: min 2.6659x, median 2.7713x, max 3.1179x
+```
 
-Additional context — synthetic contiguous results on RTX 3090 and A40 showed
-similar prefill margins (RTX 3090: median ~2.0x, A40: median ~2.0x vs
-decomposed vLLM+write, also non-CUDA-Graph eager measurement).
+The CUDA Graph result is the important part: the decode improvement does not
+collapse to 1x when launch overhead is mostly removed.
 
-If useful, I can share the benchmark script, JSON summaries, environment notes,
-and the full 3-GPU synthetic artifact pack.
+Caveat: I only loaded the narrow vLLM CUDA extension path on the pod, not the
+full vLLM Python runtime dependency stack, so RoPE itself used a local reference
+fallback. The cache writer baseline is still the real vLLM CUDA op:
+`torch.ops._C_cache_ops.reshape_and_cache`.
+
+Artifacts and scripts are in:
+
+```text
+https://github.com/rafalwronapl/kernelarena-rope-kv-fusion
+```
+
+I would treat this as evidence that an NVIDIA/Triton fused RoPE + KV-cache-write
+path is worth testing inside vLLM proper, not as production-ready replacement
+code.

@@ -5,23 +5,30 @@
 Allowed:
 
 ```text
-RTX 4090 contract-oracle evidence for a fused Triton K-RoPE + KV-cache-write
-kernel on selected vLLM-cache-contract rows.
+RTX 4090 microbenchmark evidence for a fused Triton K-RoPE + KV-cache-write
+kernel on selected vLLM paged-cache layouts.
 ```
 
 Allowed:
 
 ```text
-On the recorded RTX 4090 contract benchmark, fused RoPE+KV-write beat decomposed
-vLLM RoPE + contract write for prefill cases with median 1.68x on 8/16 correct
-prefill rows. Robust median across all rows (excluding >5x outliers): 1.81x.
+The fused Triton kernel beat vLLM's real CUDA cache writer
+`torch.ops._C_cache_ops.reshape_and_cache` on the recorded selected RTX 4090
+layouts, with 16/16 correct rows in the summary run.
 ```
 
 Allowed:
 
 ```text
-Same-pod repeat stability showed 48/48 correct rows and prefill-robust median
-~1.68x vs vLLM RoPE + contract write.
+In the 2026-06-25 RTX 4090 summary run, fused vs real vLLM cache writer was:
+prefill median 1.9319x and decode median 4.3409x, with 16/16 correct rows.
+```
+
+Allowed:
+
+```text
+In the CUDA Graph decode benchmark, speedup remained min 2.6659x, median
+2.7713x, max 3.1179x across 8/8 correct selected decode rows.
 ```
 
 Allowed:
@@ -31,13 +38,28 @@ FlashInfer API probe was partial-comparable; no timing claim against FlashInfer
 is made.
 ```
 
+## Required Caveats
+
+Use these caveats near any public result:
+
+```text
+selected-layout microbenchmark
+NVIDIA RTX 4090
+vLLM 0.9.2 real cache writer only
+RoPE provider was local reference fallback in the real-cache-writer run
+not full serving
+not end-to-end vLLM
+not FlashInfer timing comparison
+not official TritonBench
+```
+
 ## Blocked Claims
 
 Do not claim:
 
 - full LLM serving speedup
-- production vLLM cache-path win
 - end-to-end vLLM win
+- production vLLM path win
 - official TritonBench result
 - upstream result
 - SOTA RoPE
@@ -46,34 +68,31 @@ Do not claim:
 - that vLLM has no implementation at all
 - that this replaces vLLM, FlashInfer, FlashAttention, or any production stack
 
-## Required Caveats
-
-Use these caveats near any public result:
-
-```text
-contract_oracle microbenchmark
-selected layouts
-NVIDIA RTX 4090
-not full serving
-not production cache path
-not FlashInfer comparison
-```
-
 ## Decode Results
 
-Decode cases (1 token per sequence, small batch) show higher raw speedups
-but are kernel-launch-overhead dominated in eager mode. Under CUDA Graphs
-(production vLLM decode path) this overhead is amortized and these margins
-likely do not survive. Do not use decode numbers as headline claims.
+The old contract-oracle decode results were launch-overhead suspect. The new
+CUDA Graph replay benchmark reduces that concern: selected decode rows still
+showed 2.6659x-3.1179x speedup under graph replay.
+
+Allowed wording:
+
+```text
+The selected decode microbenchmark retained about 2.7x-3.1x speedup under CUDA
+Graph replay.
+```
+
+Do not phrase this as an end-to-end serving speedup.
 
 ## Outliers
 
-Outliers above `5x` in repeat rows are timing noise and must not be used as
-headline claims.
+Avoid headline claims from single outlier rows. Use min/median/max and separate
+prefill from decode. The repeat3 decode max 5.2003x should not be used as the
+headline.
 
-## Clone Asymmetry
+## Method Caveat
 
-The baseline calls k.clone() inside the timed loop because vLLM's forward_cuda
-modifies k in-place. The fused kernel reads k without cloning. This adds ~1-2%
-overhead to baseline for prefill. Results are labeled contract_oracle to reflect
-this methodological caveat.
+The real-cache-writer run loaded vLLM's CUDA extension and used
+`torch.ops._C_cache_ops.reshape_and_cache`. It did not use the full vLLM Python
+runtime RoPE path because that pod had only the narrow extension path installed.
+RoPE was computed by the local reference fallback. This is acceptable for a
+cache-writer microbenchmark, but it is not a full vLLM runtime benchmark.

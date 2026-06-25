@@ -1,14 +1,27 @@
-﻿# Artifact Manifest
+# Artifact Manifest
 
-Generated: 2026-06-24
+Generated: 2026-06-25
 
-Covers only the frozen benchmark artifacts in `artifacts/`.
-Documentation files (README, CLAIMS, REPRO, benchmark script) are living
-documents and are not hashed here — use git history for their integrity.
+Covers frozen benchmark artifacts in `artifacts/`.
+Documentation files and benchmark scripts at repository root are living documents; use git history for their integrity.
 
 | SHA256 | Bytes | Path |
 | --- | ---: | --- |
+| `0A477B0FC222FE3DE3DB427A4EF1710C0B90248385742EC0524CBC8F6A35DC2B` | 21485 | `artifacts/cudagraph_4090_benchmark_rope_cudagraph_decode.py` |
+| `39AD2413E35917393EEC718F06DF737CF86B1D81B3C1CD703354208C49FF85E1` | 1067 | `artifacts/cudagraph_4090_rope_cudagraph_decode_full.log` |
+| `073673829FBA2460502C0E2D739239F2DEBFCB6158CDD1D927486AE7EF300317` | 12545 | `artifacts/cudagraph_4090_rope_cudagraph_decode_smoke.json` |
+| `21D7532BA27E4AB78FC9BD60197837F0D31306714F288F8060A3F91D1D956121` | 12549 | `artifacts/cudagraph_4090_rope_cudagraph_decode_summary.json` |
 | `177DFEFBCA91CF76DFDB235CDDD2985388E2F477CA6EC8510AB0A767188F89D6` | 14276 | `artifacts/flashinfer_api_probe_4090.json` |
+| `5D85F62F4E8CCF1F1182E150D829A207C9934C8DB271FE3A62D02D58717A2BA9` | 26515 | `artifacts/real_vllm_4090_benchmark_rope_real_vllm_contract.py` |
+| `753AEFAE1B984CFA282C5F3DF30D261A14BD233B9C34AE9E0B290AEEFF669BF0` | 1819 | `artifacts/real_vllm_4090_real_vllm_probe.json` |
+| `6685251990F8C1B0582A9A9AC1BC60A509DD1D9C5BD85A753DAD8A61C4B929BE` | 7424 | `artifacts/real_vllm_4090_rope_real_vllm_contract_full.log` |
+| `5BCDC1EBAD05D6F8434EC3B13EC5411EC0AC6EE63080E9577F2B41D549D8CC17` | 23403 | `artifacts/real_vllm_4090_rope_real_vllm_contract_repeat1.json` |
+| `09D1EA8E881F07B1767D2C934E3A185E0471C3B7316BBF9CC9A148634F7CDD72` | 23398 | `artifacts/real_vllm_4090_rope_real_vllm_contract_repeat2.json` |
+| `39F4235E64D9CE306E8DEC23E12C34BE89F91B42AFB94BCDBA44445840589F42` | 23397 | `artifacts/real_vllm_4090_rope_real_vllm_contract_repeat3.json` |
+| `9802392211D8FFA5863DD0E1CE222AF4955B8A23D40A9AF9283182EDA35F3FC5` | 23397 | `artifacts/real_vllm_4090_rope_real_vllm_contract_smoke.json` |
+| `01E45FDBE7AC43816FA31244A311A080EF5319A3E2CADABBBAE2C26777E0F8D7` | 23396 | `artifacts/real_vllm_4090_rope_real_vllm_contract_summary.json` |
+| `12CB7F250821863CC627193A197A99CC72A6560CCD48EDBA573707D534BC5CA1` | 9170 | `artifacts/results_cudagraph_decode_4090_2026-06-25.zip` |
+| `B1DCE366B41D4DE325828A2DC69F508E262A069F005790EE574AD0DAE4CEEA48` | 17668 | `artifacts/results_real_vllm_contract_4090_2026-06-25.zip` |
 | `84326AFC1C3B8D28C156C3EFA1AC73457537C1C4832397A93715521F55B2DB60` | 1091 | `artifacts/rope_flashinfer_compare_4090_blocked.json` |
 | `3EADFBC73443E111FD042B7D731FD29D7433DBA013CDE04CF3B5E03537E62F6A` | 6269 | `artifacts/rope_flashinfer_compare_4090_results.tar.gz` |
 | `5E130CE7D8F962F536C9E3AD7A58C80A2357D8BCA7D55CAA5539DDE9E5E3833E` | 18919 | `artifacts/rope_vllm_cache_contract_4090.json` |

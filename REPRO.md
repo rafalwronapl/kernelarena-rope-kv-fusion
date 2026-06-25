@@ -2,20 +2,26 @@
 
 ## Known Working Stack
 
-The clean RTX 4090 contract result used:
+The clean RTX 4090 real-cache-writer result used:
 
 ```text
 GPU: NVIDIA GeForce RTX 4090
-driver: 550.127.05
 vLLM: 0.9.2
 torch: 2.7.0+cu126
 triton: 3.3.0
 python: 3.11
 ```
 
-`vLLM 0.9.2` was selected because its CUDA RoPE path supports
-`key: Optional[torch.Tensor] = None`. Older `vLLM 0.8.5` required both query and
-key tensors and was not a fair K-only baseline.
+The key requirement is that `vllm._C` loads successfully and registers:
+
+```text
+torch.ops._C_cache_ops.reshape_and_cache
+```
+
+The recorded 2026-06-25 run used vLLM's real CUDA cache writer but a local RoPE
+reference fallback. That was intentional after the pod image lacked the full
+vLLM Python dependency stack. The benchmark scope is therefore the fused RoPE +
+real vLLM cache-write microbenchmark, not full vLLM serving.
 
 ## Setup Sketch
 
@@ -23,56 +29,68 @@ key tensors and was not a fair K-only baseline.
 python -m venv --system-site-packages /workspace/ka-vllm092-env
 source /workspace/ka-vllm092-env/bin/activate
 python -m pip install --upgrade pip
-TMPDIR=/workspace PIP_CACHE_DIR=/workspace/pip-cache-vllm092 \
-  pip install vllm==0.9.2 torch==2.7.0 triton torchaudio==2.7.0 torchvision==0.22.0
+pip install torch==2.7.0 triton==3.3.0
+pip install vllm==0.9.2 --no-deps
 ```
 
-Depending on the base image, additional vLLM dependencies may be needed. The
-recorded run installed the minimum dependencies required for:
+If PyTorch CUDA libraries are shadowed by system packages, set `LD_LIBRARY_PATH`
+so the venv NVIDIA package libraries come first.
 
-```text
-from vllm.model_executor.layers.rotary_embedding import RotaryEmbedding
-from vllm import _custom_ops
-```
-
-## Commands
-
-Dry run:
+Smoke check:
 
 ```bash
-python benchmark_rope_vllm_cache_contract.py \
-  --dry-run \
-  --output artifacts/rope_vllm_cache_contract_dry_run_4090.json
+python - <<'PY'
+import torch
+import vllm._C
+print(torch.ops._C_cache_ops.reshape_and_cache)
+print(torch.cuda.get_device_name(0))
+PY
 ```
 
-Full run:
+## Real vLLM Cache Writer Benchmark
 
 ```bash
-python benchmark_rope_vllm_cache_contract.py \
+python benchmark_rope_real_vllm_contract.py \
   --warmup 20 \
   --repeats 100 \
-  --output artifacts/rope_vllm_cache_contract_4090.json
+  --output artifacts/rope_real_vllm_contract_summary.json
 ```
 
 Repeat stability:
 
 ```bash
 for i in 1 2 3; do
-  python benchmark_rope_vllm_cache_contract.py \
+  python benchmark_rope_real_vllm_contract.py \
     --warmup 20 \
     --repeats 100 \
-    --output artifacts/rope_vllm_cache_contract_4090_repeat${i}.json
+    --output artifacts/rope_real_vllm_contract_repeat${i}.json
 done
 ```
 
-## Expected Result Shape
-
-The clean 4090 run should produce:
+Expected result shape:
 
 ```text
 rows=16
 correct=16/16
-vLLM baseline blocked rows=0
+oracle=real_vllm_oracle
+reshape_and_cache_path=vllm._C + torch.ops._C_cache_ops.reshape_and_cache
 ```
 
-The exact latency ratios may vary by pod and driver.
+## CUDA Graph Decode Benchmark
+
+```bash
+python benchmark_rope_cudagraph_decode.py \
+  --warmup 20 \
+  --repeats 200 \
+  --output artifacts/rope_cudagraph_decode_summary.json
+```
+
+Expected result shape:
+
+```text
+rows=8
+correct=8/8
+speedup_graph present for all rows
+```
+
+The exact latency ratios may vary by pod, driver, thermal state, and GPU clocks.

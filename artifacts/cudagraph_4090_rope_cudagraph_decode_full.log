@@ -1,0 +1,12 @@
+PROGRESS 1/8 12% fp16_decode_contract_batch1_kv8_d128_b16 correct=True eager=5.792x graph=2.675x oracle=contract_oracle
+PROGRESS 2/8 25% fp16_decode_contract_batch8_kv8_d128_b16 correct=True eager=5.167x graph=2.763x oracle=contract_oracle
+PROGRESS 3/8 38% fp16_decode_contract_batch32_kv8_d128_b16 correct=True eager=5.436x graph=2.788x oracle=contract_oracle
+PROGRESS 4/8 50% fp16_decode_contract_batch128_kv8_d128_b16 correct=True eager=6.058x graph=3.118x oracle=contract_oracle
+PROGRESS 5/8 62% bf16_decode_contract_batch1_kv8_d128_b16 correct=True eager=6.028x graph=2.666x oracle=contract_oracle
+PROGRESS 6/8 75% bf16_decode_contract_batch8_kv8_d128_b16 correct=True eager=6.140x graph=2.776x oracle=contract_oracle
+PROGRESS 7/8 88% bf16_decode_contract_batch32_kv8_d128_b16 correct=True eager=5.623x graph=2.766x oracle=contract_oracle
+PROGRESS 8/8 100% bf16_decode_contract_batch128_kv8_d128_b16 correct=True eager=5.669x graph=3.112x oracle=contract_oracle
+{
+  "output": "/workspace/kernel-arena/artifacts/rope_cudagraph_decode_summary.json",
+  "rows": 8
+}

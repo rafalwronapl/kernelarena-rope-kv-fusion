@@ -1,0 +1,80 @@
+PROGRESS 1/16 6% fp16_prefill_contract_kv8_d128_b16 correct=True vs_vllm=1.768x oracle=real_vllm_oracle
+PROGRESS 2/16 12% fp16_prefill_fragmented_kv8_d128_b16 correct=True vs_vllm=1.657x oracle=real_vllm_oracle
+PROGRESS 3/16 19% fp16_prefill_contract_kv16_d128_b16 correct=True vs_vllm=2.211x oracle=real_vllm_oracle
+PROGRESS 4/16 25% fp16_prefill_fragmented_kv16_d128_b16 correct=True vs_vllm=2.048x oracle=real_vllm_oracle
+PROGRESS 5/16 31% bf16_prefill_contract_kv8_d128_b16 correct=True vs_vllm=1.816x oracle=real_vllm_oracle
+PROGRESS 6/16 38% bf16_prefill_fragmented_kv8_d128_b16 correct=True vs_vllm=1.661x oracle=real_vllm_oracle
+PROGRESS 7/16 44% bf16_prefill_contract_kv16_d128_b16 correct=True vs_vllm=2.212x oracle=real_vllm_oracle
+PROGRESS 8/16 50% bf16_prefill_fragmented_kv16_d128_b16 correct=True vs_vllm=2.048x oracle=real_vllm_oracle
+PROGRESS 9/16 56% fp16_decode_contract_batch1_kv8_d128_b16 correct=True vs_vllm=4.340x oracle=real_vllm_oracle
+PROGRESS 10/16 62% fp16_decode_contract_batch8_kv8_d128_b16 correct=True vs_vllm=4.342x oracle=real_vllm_oracle
+PROGRESS 11/16 69% fp16_decode_contract_batch32_kv8_d128_b16 correct=True vs_vllm=4.126x oracle=real_vllm_oracle
+PROGRESS 12/16 75% fp16_decode_contract_batch128_kv8_d128_b16 correct=True vs_vllm=4.422x oracle=real_vllm_oracle
+PROGRESS 13/16 81% bf16_decode_contract_batch1_kv8_d128_b16 correct=True vs_vllm=4.234x oracle=real_vllm_oracle
+PROGRESS 14/16 88% bf16_decode_contract_batch8_kv8_d128_b16 correct=True vs_vllm=4.678x oracle=real_vllm_oracle
+PROGRESS 15/16 94% bf16_decode_contract_batch32_kv8_d128_b16 correct=True vs_vllm=4.362x oracle=real_vllm_oracle
+PROGRESS 16/16 100% bf16_decode_contract_batch128_kv8_d128_b16 correct=True vs_vllm=3.978x oracle=real_vllm_oracle
+{
+  "output": "/workspace/kernel-arena/artifacts/rope_real_vllm_contract_summary.json",
+  "rows": 16
+}
+PROGRESS 1/16 6% fp16_prefill_contract_kv8_d128_b16 correct=True vs_vllm=1.771x oracle=real_vllm_oracle
+PROGRESS 2/16 12% fp16_prefill_fragmented_kv8_d128_b16 correct=True vs_vllm=1.665x oracle=real_vllm_oracle
+PROGRESS 3/16 19% fp16_prefill_contract_kv16_d128_b16 correct=True vs_vllm=2.210x oracle=real_vllm_oracle
+PROGRESS 4/16 25% fp16_prefill_fragmented_kv16_d128_b16 correct=True vs_vllm=2.048x oracle=real_vllm_oracle
+PROGRESS 5/16 31% bf16_prefill_contract_kv8_d128_b16 correct=True vs_vllm=1.816x oracle=real_vllm_oracle
+PROGRESS 6/16 38% bf16_prefill_fragmented_kv8_d128_b16 correct=True vs_vllm=1.662x oracle=real_vllm_oracle
+PROGRESS 7/16 44% bf16_prefill_contract_kv16_d128_b16 correct=True vs_vllm=2.213x oracle=real_vllm_oracle
+PROGRESS 8/16 50% bf16_prefill_fragmented_kv16_d128_b16 correct=True vs_vllm=2.048x oracle=real_vllm_oracle
+PROGRESS 9/16 56% fp16_decode_contract_batch1_kv8_d128_b16 correct=True vs_vllm=4.306x oracle=real_vllm_oracle
+PROGRESS 10/16 62% fp16_decode_contract_batch8_kv8_d128_b16 correct=True vs_vllm=4.479x oracle=real_vllm_oracle
+PROGRESS 11/16 69% fp16_decode_contract_batch32_kv8_d128_b16 correct=True vs_vllm=4.480x oracle=real_vllm_oracle
+PROGRESS 12/16 75% fp16_decode_contract_batch128_kv8_d128_b16 correct=True vs_vllm=4.454x oracle=real_vllm_oracle
+PROGRESS 13/16 81% bf16_decode_contract_batch1_kv8_d128_b16 correct=True vs_vllm=4.248x oracle=real_vllm_oracle
+PROGRESS 14/16 88% bf16_decode_contract_batch8_kv8_d128_b16 correct=True vs_vllm=4.071x oracle=real_vllm_oracle
+PROGRESS 15/16 94% bf16_decode_contract_batch32_kv8_d128_b16 correct=True vs_vllm=4.298x oracle=real_vllm_oracle
+PROGRESS 16/16 100% bf16_decode_contract_batch128_kv8_d128_b16 correct=True vs_vllm=4.053x oracle=real_vllm_oracle
+{
+  "output": "/workspace/kernel-arena/artifacts/rope_real_vllm_contract_repeat1.json",
+  "rows": 16
+}
+PROGRESS 1/16 6% fp16_prefill_contract_kv8_d128_b16 correct=True vs_vllm=1.892x oracle=real_vllm_oracle
+PROGRESS 2/16 12% fp16_prefill_fragmented_kv8_d128_b16 correct=True vs_vllm=1.660x oracle=real_vllm_oracle
+PROGRESS 3/16 19% fp16_prefill_contract_kv16_d128_b16 correct=True vs_vllm=2.211x oracle=real_vllm_oracle
+PROGRESS 4/16 25% fp16_prefill_fragmented_kv16_d128_b16 correct=True vs_vllm=2.048x oracle=real_vllm_oracle
+PROGRESS 5/16 31% bf16_prefill_contract_kv8_d128_b16 correct=True vs_vllm=1.816x oracle=real_vllm_oracle
+PROGRESS 6/16 38% bf16_prefill_fragmented_kv8_d128_b16 correct=True vs_vllm=1.661x oracle=real_vllm_oracle
+PROGRESS 7/16 44% bf16_prefill_contract_kv16_d128_b16 correct=True vs_vllm=2.210x oracle=real_vllm_oracle
+PROGRESS 8/16 50% bf16_prefill_fragmented_kv16_d128_b16 correct=True vs_vllm=2.046x oracle=real_vllm_oracle
+PROGRESS 9/16 56% fp16_decode_contract_batch1_kv8_d128_b16 correct=True vs_vllm=4.305x oracle=real_vllm_oracle
+PROGRESS 10/16 62% fp16_decode_contract_batch8_kv8_d128_b16 correct=True vs_vllm=4.306x oracle=real_vllm_oracle
+PROGRESS 11/16 69% fp16_decode_contract_batch32_kv8_d128_b16 correct=True vs_vllm=4.366x oracle=real_vllm_oracle
+PROGRESS 12/16 75% fp16_decode_contract_batch128_kv8_d128_b16 correct=True vs_vllm=4.424x oracle=real_vllm_oracle
+PROGRESS 13/16 81% bf16_decode_contract_batch1_kv8_d128_b16 correct=True vs_vllm=4.383x oracle=real_vllm_oracle
+PROGRESS 14/16 88% bf16_decode_contract_batch8_kv8_d128_b16 correct=True vs_vllm=4.431x oracle=real_vllm_oracle
+PROGRESS 15/16 94% bf16_decode_contract_batch32_kv8_d128_b16 correct=True vs_vllm=4.305x oracle=real_vllm_oracle
+PROGRESS 16/16 100% bf16_decode_contract_batch128_kv8_d128_b16 correct=True vs_vllm=4.411x oracle=real_vllm_oracle
+{
+  "output": "/workspace/kernel-arena/artifacts/rope_real_vllm_contract_repeat2.json",
+  "rows": 16
+}
+PROGRESS 1/16 6% fp16_prefill_contract_kv8_d128_b16 correct=True vs_vllm=1.772x oracle=real_vllm_oracle
+PROGRESS 2/16 12% fp16_prefill_fragmented_kv8_d128_b16 correct=True vs_vllm=1.662x oracle=real_vllm_oracle
+PROGRESS 3/16 19% fp16_prefill_contract_kv16_d128_b16 correct=True vs_vllm=2.212x oracle=real_vllm_oracle
+PROGRESS 4/16 25% fp16_prefill_fragmented_kv16_d128_b16 correct=True vs_vllm=2.048x oracle=real_vllm_oracle
+PROGRESS 5/16 31% bf16_prefill_contract_kv8_d128_b16 correct=True vs_vllm=1.816x oracle=real_vllm_oracle
+PROGRESS 6/16 38% bf16_prefill_fragmented_kv8_d128_b16 correct=True vs_vllm=1.662x oracle=real_vllm_oracle
+PROGRESS 7/16 44% bf16_prefill_contract_kv16_d128_b16 correct=True vs_vllm=2.210x oracle=real_vllm_oracle
+PROGRESS 8/16 50% bf16_prefill_fragmented_kv16_d128_b16 correct=True vs_vllm=2.046x oracle=real_vllm_oracle
+PROGRESS 9/16 56% fp16_decode_contract_batch1_kv8_d128_b16 correct=True vs_vllm=3.621x oracle=real_vllm_oracle
+PROGRESS 10/16 62% fp16_decode_contract_batch8_kv8_d128_b16 correct=True vs_vllm=4.213x oracle=real_vllm_oracle
+PROGRESS 11/16 69% fp16_decode_contract_batch32_kv8_d128_b16 correct=True vs_vllm=5.200x oracle=real_vllm_oracle
+PROGRESS 12/16 75% fp16_decode_contract_batch128_kv8_d128_b16 correct=True vs_vllm=4.508x oracle=real_vllm_oracle
+PROGRESS 13/16 81% bf16_decode_contract_batch1_kv8_d128_b16 correct=True vs_vllm=4.351x oracle=real_vllm_oracle
+PROGRESS 14/16 88% bf16_decode_contract_batch8_kv8_d128_b16 correct=True vs_vllm=4.751x oracle=real_vllm_oracle
+PROGRESS 15/16 94% bf16_decode_contract_batch32_kv8_d128_b16 correct=True vs_vllm=4.433x oracle=real_vllm_oracle
+PROGRESS 16/16 100% bf16_decode_contract_batch128_kv8_d128_b16 correct=True vs_vllm=3.838x oracle=real_vllm_oracle
+{
+  "output": "/workspace/kernel-arena/artifacts/rope_real_vllm_contract_repeat3.json",
+  "rows": 16
+}

@@ -1,80 +1,98 @@
-# KernelArena Finding: RoPE + KV-Cache Write Fusion v0
+# KernelArena Finding: RoPE + KV-Cache Write Fusion v1
 
-```
+```text
 Status: narrow microbenchmark finding
-Scope:  NVIDIA RTX 4090, contract_oracle, selected layouts
-Not:    serving benchmark | production vLLM path | FlashInfer comparison
+Scope:  NVIDIA RTX 4090, selected vLLM paged-cache layouts
+Now:    real vLLM `vllm._C` cache writer + CUDA Graph decode evidence
+Not:    full serving benchmark | end-to-end vLLM win | FlashInfer timing comparison
 ```
 
-Date: 2026-06-24
+Date: 2026-06-25
 
 ## Summary
 
-This finding reports a narrow NVIDIA/Triton microbenchmark result for:
+This repository reports a narrow NVIDIA/Triton microbenchmark result for:
 
 ```text
 K RoPE + KV-cache write
 ```
 
-On an RTX 4090, a fused Triton kernel beat decomposed `vLLM RoPE + contract
-write` and `Inductor RoPE + contract write` on selected vLLM-cache-contract
-rows.
+On an RTX 4090, a fused Triton kernel beat a decomposed path that writes through
+vLLM's real CUDA cache writer:
 
-This is not an end-to-end serving benchmark and not a production vLLM cache-path
-claim.
+```text
+torch.ops._C_cache_ops.reshape_and_cache
+```
 
-## Main Result
+The strongest new evidence is that the decode advantage also survives CUDA Graph
+replay. That reduces the main prior concern that the decode result was only a
+kernel-launch-overhead artifact.
+
+This is still a microbenchmark finding. It is not an end-to-end vLLM serving
+benchmark, not an official TritonBench result, and not a FlashInfer comparison.
+
+## Main Result: Real vLLM Cache Writer
 
 Environment:
 
 ```text
 GPU: NVIDIA GeForce RTX 4090
-driver: 550.127.05
 vLLM: 0.9.2
 torch: 2.7.0+cu126
 triton: 3.3.0
-oracle: contract_oracle
+oracle: real_vllm_oracle
+cache writer: vLLM `vllm._C` / `torch.ops._C_cache_ops.reshape_and_cache`
+RoPE provider in this run: local reference RoPE fallback
 ```
 
-**Important:** `oracle=contract_oracle` means the vLLM baseline uses vLLM's RoPE kernel
-followed by our own contract-compliant KV write, not vLLM's internal production cache
-writer. This is a deliberate scope choice and is not the same as benchmarking against
-vLLM's full cache path end-to-end.
-
-Single full run:
+Full run:
 
 ```text
 rows=16
 correct=16/16
-vLLM baseline blocked rows=0
-fused vs vLLM RoPE + contract write: min 1.5198x, median 2.08085x, max 2.7586x
-fused vs Inductor RoPE + contract write: min 1.6120x, median 2.8805x, max 5.0255x
+fused vs real vLLM reshape_and_cache: min 1.6572x, median 3.0952x, max 4.6780x
+prefill rows: min 1.6572x, median 1.9319x, max 2.2122x
+decode rows:  min 3.9782x, median 4.3409x, max 4.6780x
 ```
 
-Same-pod repeat stability:
+Same-pod repeats:
 
 ```text
 repeat_runs=3
 rows=48
 correct=48/48
-vLLM baseline blocked rows=0
-fused vs vLLM RoPE + contract write: min 1.5026x, median 2.05375x
-robust median excluding obvious >5x timing outliers: 1.8125x
+prefill median vs real vLLM reshape_and_cache: about 1.93x-1.97x
+decode median vs real vLLM reshape_and_cache: about 4.30x-4.39x
 ```
 
-Outliers above `5x` are timing noise and are not headline claims.
+Important caveat: the cache writer is vLLM's real CUDA custom op, but the RoPE
+calculation in this run used a local reference fallback because the RunPod image
+had only the narrow vLLM extension path installed, not the full vLLM Python
+runtime dependency stack. Therefore the fair claim is about a fused RoPE + real
+vLLM cache-write microbenchmark, not a full vLLM model path.
+
+## CUDA Graph Decode Result
+
+CUDA Graph decode benchmark:
+
+```text
+rows=8
+correct=8/8
+eager speedup: min 5.1667x, median 5.7302x, max 6.1404x
+CUDA Graph replay speedup: min 2.6659x, median 2.7713x, max 3.1179x
+```
+
+Interpretation: decode speedup is not only launch overhead. CUDA Graph replay
+removes most per-launch overhead, and the fused kernel still keeps about
+`2.7x-3.1x` on these selected decode layouts.
 
 ## Why This Is Interesting
 
-Standalone RoPE is not the strongest story: optimized vLLM standalone RoPE is
-already good. The interesting lane is the boundary between RoPE and writing K/V
-into cache.
-
-The fused Triton path removes a separate memory pass:
+Standalone RoPE is not the strongest story. The more useful boundary is:
 
 ```text
-decomposed: RoPE(K) -> write K/V to cache
-fused:      RoPE(K) + write K/V to cache
+decomposed: RoPE(K) -> write K/V to paged cache
+fused:      RoPE(K) + write K/V to paged cache
 ```
 
 This matches a real performance area: vLLM issue `#24678` discusses
@@ -91,45 +109,30 @@ This is not an unknown problem category.
   and paged KV-cache append APIs plus an FP8/quantized fused path,
   `rope_quantize_fp8_append_paged_kv_cache`.
 
-KernelArena's contribution here is narrower:
-
-```text
-a small NVIDIA/Triton contract-oracle repro with JSON artifacts and repeat
-evidence for fp16/bf16 selected layouts
-```
-
-## FlashInfer Probe
-
-FlashInfer API probe on RTX 4090:
-
-```text
-flashinfer=0.6.12
-classification=partial_comparable
-```
-
-No timing comparison against FlashInfer is claimed. The discovered fused
-FlashInfer path is FP8/quantized and includes Q/K/nope inputs, so comparing it
-directly against this fp16/bf16 contract benchmark would be misleading.
+KernelArena's contribution here is narrower: a small NVIDIA/Triton repro with
+JSON artifacts showing selected-layout speedups against vLLM's real cache writer
+and under CUDA Graph replay.
 
 ## Files
 
-Script:
+Scripts:
 
 ```text
-benchmark_rope_vllm_cache_contract.py
+benchmark_rope_real_vllm_contract.py
+benchmark_rope_cudagraph_decode.py
+benchmark_rope_vllm_cache_contract.py  # older contract-oracle baseline
 ```
 
-Artifacts:
+New artifacts:
 
 ```text
-artifacts/rope_vllm_cache_contract_4090_summary.json
-artifacts/rope_vllm_cache_contract_4090.json
-artifacts/rope_vllm_cache_contract_4090_results.tar.gz
-artifacts/rope_vllm_cache_contract_4090_repeat3_summary.json
-artifacts/rope_vllm_cache_contract_4090_repeat3_results.tar.gz
-artifacts/flashinfer_api_probe_4090.json
-artifacts/rope_flashinfer_compare_4090_blocked.json
-artifacts/rope_flashinfer_compare_4090_results.tar.gz
+artifacts/real_vllm_4090_rope_real_vllm_contract_summary.json
+artifacts/real_vllm_4090_rope_real_vllm_contract_repeat1.json
+artifacts/real_vllm_4090_rope_real_vllm_contract_repeat2.json
+artifacts/real_vllm_4090_rope_real_vllm_contract_repeat3.json
+artifacts/cudagraph_4090_rope_cudagraph_decode_summary.json
+artifacts/results_real_vllm_contract_4090_2026-06-25.zip
+artifacts/results_cudagraph_decode_4090_2026-06-25.zip
 ```
 
 Read:
@@ -144,18 +147,17 @@ VLLM_ISSUE_COMMENT.md
 ## Recommended Public Wording
 
 ```text
-KernelArena has RTX 4090 contract-oracle evidence that a fused Triton
-K-RoPE + KV-cache-write kernel beats decomposed vLLM RoPE + contract write and
-Inductor RoPE + contract write on selected vLLM-cache-contract rows. This is a
-microbenchmark finding, not a full serving or production vLLM cache-path claim.
+KernelArena has RTX 4090 microbenchmark evidence that a fused Triton
+K-RoPE + KV-cache-write kernel beats vLLM's real CUDA `reshape_and_cache` cache
+writer on selected paged-cache layouts, and that selected decode speedups remain
+about 2.7x-3.1x under CUDA Graph replay. This is a kernel microbenchmark, not a
+full vLLM serving-speedup claim.
 ```
 
 ## How to Cite
 
-If you reference this finding, cite this repository and the artifact manifest:
-
-```
-rafalwronapl. KernelArena Finding: RoPE + KV-Cache Write Fusion v0. 2026.
+```text
+rafalwronapl. KernelArena Finding: RoPE + KV-Cache Write Fusion v1. 2026.
 https://github.com/rafalwronapl/kernelarena-rope-kv-fusion
 Artifact manifest: ARTIFACT_MANIFEST.md
 ```
