@@ -8,7 +8,7 @@ Documentation files and benchmark scripts at repository root are living document
 | SHA256 | Bytes | Path |
 | --- | ---: | --- |
 | `00643AB7DCC19B9D94A5076CE9B4B3B037A09AE3BD8404A965DCACFDB9B0AC4D` | 3908 | `artifacts/benchmark_rope_provider_split.py` |
-| `15E9E0C2FA9F80D1D82591574F5ADB39A0C71A17F7743FDD9D002930DB7E091F` | 6350 | `artifacts/benchmark_rope_real_vllm_cudagraph_decode.py` |
+| `486376A1EFA99A07725C03A7893272513BF5DBD9996CCDCFEB319E55C726BAD3` | 7806 | `artifacts/benchmark_rope_real_vllm_cudagraph_decode.py` |
 | `0A477B0FC222FE3DE3DB427A4EF1710C0B90248385742EC0524CBC8F6A35DC2B` | 21485 | `artifacts/cudagraph_4090_benchmark_rope_cudagraph_decode.py` |
 | `39AD2413E35917393EEC718F06DF737CF86B1D81B3C1CD703354208C49FF85E1` | 1067 | `artifacts/cudagraph_4090_rope_cudagraph_decode_full.log` |
 | `073673829FBA2460502C0E2D739239F2DEBFCB6158CDD1D927486AE7EF300317` | 12545 | `artifacts/cudagraph_4090_rope_cudagraph_decode_smoke.json` |

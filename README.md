@@ -101,11 +101,16 @@ oracle: real_vllm_oracle
 baseline: local RoPE reference + real torch.ops._C_cache_ops.reshape_and_cache
 eager speedup: min 4.6724x, median 4.7766x, max 5.1641x
 CUDA Graph replay speedup: min 3.0316x, median 4.3983x, max 5.0125x
+correctness fields: not present in the first 3090 timing artifact; rerun with
+benchmark_rope_real_vllm_cudagraph_decode.py is required before claiming 8/8
+correctness for this follow-up
 ```
 
-Interpretation: the CUDA Graph baseline mismatch is fixed for decode on RTX
-3090. The remaining caveat is RoPE-provider contamination: baseline RoPE is a
-local tensor reference, not vLLM `RotaryEmbedding.forward_cuda`.
+Interpretation: the CUDA Graph baseline mismatch is fixed for decode timing on
+RTX 3090. The first artifact did not include cache correctness fields, so this
+should be treated as timing evidence until rerun with the updated script. The
+remaining caveat is RoPE-provider contamination: baseline RoPE is a local tensor
+reference, not vLLM `RotaryEmbedding.forward_cuda`.
 
 ## RoPE Provider Split
 
@@ -191,11 +196,12 @@ VLLM_ISSUE_COMMENT.md
 ```text
 KernelArena has RTX 4090 microbenchmark evidence that a fused Triton
 K-RoPE + KV-cache-write kernel beats vLLM's real CUDA `reshape_and_cache` cache
-writer on selected paged-cache layouts. A follow-up RTX 3090 decode benchmark
-using real `reshape_and_cache` under CUDA Graph replay retains about
-3.0x-5.0x speedup on selected rows. Prefill numbers are RoPE-provider
-contaminated and should not be framed as pure fusion benefit. This is a kernel
-microbenchmark, not a full vLLM serving-speedup claim.
+writer on selected paged-cache layouts. A follow-up RTX 3090 decode timing
+benchmark using real `reshape_and_cache` under CUDA Graph replay retains about
+3.0x-5.0x speedup on selected rows, but needs rerun with correctness fields
+before it should be cited as a correctness-backed result. Prefill numbers are
+RoPE-provider contaminated and should not be framed as pure fusion benefit. This
+is a kernel microbenchmark, not a full vLLM serving-speedup claim.
 ```
 
 ## How to Cite

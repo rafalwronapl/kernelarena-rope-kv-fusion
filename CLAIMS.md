@@ -38,11 +38,15 @@ rows.
 Allowed:
 
 ```text
-In the RTX 3090 real-cache-writer CUDA Graph decode benchmark, baseline was
-local RoPE reference plus real `torch.ops._C_cache_ops.reshape_and_cache`; graph
-replay speedup was min 3.0316x, median 4.3983x, max 5.0125x across 8 selected
-decode rows.
+In the RTX 3090 real-cache-writer CUDA Graph decode timing benchmark, baseline
+was local RoPE reference plus real `torch.ops._C_cache_ops.reshape_and_cache`;
+graph replay speedup was min 3.0316x, median 4.3983x, max 5.0125x across 8
+selected decode rows.
 ```
+
+Required caveat: the first 3090 timing artifact does not contain cache
+correctness fields. Do not claim `correct=8/8` for that follow-up until rerun
+with the updated correctness-checking script.
 
 Allowed:
 
@@ -92,9 +96,10 @@ showed 2.6659x-3.1179x speedup under graph replay. This CUDA Graph benchmark
 still uses `contract_oracle` / flat-layout contract write, not vLLM's real
 `reshape_and_cache` cache writer.
 
-The RTX 3090 follow-up fixes that baseline mismatch for decode: it uses real
-`torch.ops._C_cache_ops.reshape_and_cache` and still shows graph replay speedup
-from 3.0316x to 5.0125x.
+The RTX 3090 follow-up fixes that baseline mismatch for decode timing: it uses
+real `torch.ops._C_cache_ops.reshape_and_cache` and still shows graph replay
+speedup from 3.0316x to 5.0125x. Its first artifact lacks correctness fields, so
+it is timing evidence pending rerun.
 
 Allowed wording:
 
@@ -127,4 +132,7 @@ Before strengthening the claim, run:
 - Full vLLM `RotaryEmbedding.forward_cuda` provider split. Current 3090 split
   measured local eager RoPE versus compiled RoPE; full vLLM Rotary import was
   unavailable on the minimal vLLM install.
+- Rerun RTX 3090 real-cache-writer CUDA Graph decode with the updated script so
+  the JSON includes `correct`, `k_correct`, `v_correct`, baseline correctness,
+  and max-diff fields.
 - End-to-end vLLM integration before any production-path claim.

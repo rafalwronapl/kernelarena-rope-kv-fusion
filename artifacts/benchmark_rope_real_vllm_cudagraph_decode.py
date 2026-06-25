@@ -17,6 +17,7 @@ from benchmark_rope_real_vllm_contract import (
     reshape_and_cache,
     rope_ref,
     vllm_layout_cache,
+    vllm_layout_flat_views,
 )
 
 
@@ -48,6 +49,20 @@ def run_case(case, warmup: int, repeats: int) -> dict[str, object]:
 
     fused_vllm_layout_write(k, v, cos, sin, slots, k_cache, v_cache, case.triton_block)
     torch.cuda.synchronize()
+    flat_k_cache, flat_v_cache = vllm_layout_flat_views(k_cache, v_cache)
+    k_correct = torch.allclose(flat_k_cache[slots].float(), expected_k.float(), atol=2e-2, rtol=2e-2)
+    v_correct = torch.allclose(flat_v_cache[slots].float(), v.float(), atol=2e-2, rtol=2e-2)
+    k_diff = (flat_k_cache[slots].float() - expected_k.float()).abs().max().item()
+    v_diff = (flat_v_cache[slots].float() - v.float()).abs().max().item()
+
+    baseline_check_k, baseline_check_v = vllm_layout_cache(
+        int(contract["num_physical_blocks"]), case.kv_heads, case.head_dim, case.block_size, dtype
+    )
+    reshape_and_cache(expected_k, v, baseline_check_k, baseline_check_v, slots, "auto", scale, scale)
+    torch.cuda.synchronize()
+    base_flat_k, base_flat_v = vllm_layout_flat_views(baseline_check_k, baseline_check_v)
+    baseline_k_correct = torch.allclose(base_flat_k[slots].float(), expected_k.float(), atol=2e-2, rtol=2e-2)
+    baseline_v_correct = torch.allclose(base_flat_v[slots].float(), v.float(), atol=2e-2, rtol=2e-2)
 
     k_graph = k.clone()
     v_graph = v.clone()
@@ -121,7 +136,13 @@ def run_case(case, warmup: int, repeats: int) -> dict[str, object]:
         "oracle": "real_vllm_oracle",
         "baseline": "local_rope_ref + torch.ops._C_cache_ops.reshape_and_cache",
         "fused": "fused Triton RoPE + vLLM paged-layout KV write",
-        "correct_reference_max_abs": float(expected_k.abs().max()),
+        "correct": bool(k_correct and v_correct and baseline_k_correct and baseline_v_correct),
+        "k_correct": bool(k_correct),
+        "v_correct": bool(v_correct),
+        "baseline_k_correct": bool(baseline_k_correct),
+        "baseline_v_correct": bool(baseline_v_correct),
+        "k_max_abs_diff": k_diff,
+        "v_max_abs_diff": v_diff,
         "eager_baseline_us": round(eager_baseline_us, 3),
         "eager_fused_us": round(eager_fused_us, 3),
         "speedup_eager": round(eager_baseline_us / eager_fused_us, 4),
@@ -155,6 +176,10 @@ def main() -> None:
     payload = {
         "benchmark": "rope_real_vllm_cudagraph_decode",
         "oracle": "real_vllm_oracle",
+        "stack": {
+            "gpu": torch.cuda.get_device_name(0),
+            "torch": torch.__version__,
+        },
         "rows": rows,
         "elapsed_s": round(time.time() - started, 3),
         "non_claims": [

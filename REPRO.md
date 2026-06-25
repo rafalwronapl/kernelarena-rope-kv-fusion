@@ -93,4 +93,40 @@ correct=8/8
 speedup_graph present for all rows
 ```
 
+## Real vLLM CUDA Graph Decode Follow-Up
+
+This follow-up uses real `torch.ops._C_cache_ops.reshape_and_cache` in the
+baseline. Use the current script version so the JSON includes cache correctness
+fields.
+
+```bash
+python benchmark_rope_real_vllm_cudagraph_decode.py \
+  --warmup 20 \
+  --repeats 200 \
+  --output artifacts/rope_real_vllm_cudagraph_decode_summary_<gpu>.json
+```
+
+Expected result shape:
+
+```text
+rows=8
+oracle=real_vllm_oracle
+correct field present for each row
+speedup_graph present for all rows
+```
+
+## RoPE Provider Split
+
+```bash
+python benchmark_rope_provider_split.py \
+  --warmup 10 \
+  --repeats 50 \
+  --output artifacts/rope_provider_split_<gpu>.json
+```
+
+This estimates how much of the baseline cost comes from the RoPE provider
+choice. On the recorded RTX 3090 run, full vLLM `RotaryEmbedding.forward_cuda`
+was unavailable in the minimal install, so the artifact compares local eager
+RoPE reference versus compiled RoPE reference.
+
 The exact latency ratios may vary by pod, driver, thermal state, and GPU clocks.
