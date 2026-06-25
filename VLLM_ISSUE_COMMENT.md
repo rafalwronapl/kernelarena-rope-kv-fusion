@@ -25,7 +25,7 @@ prefill: min 1.6572x, median 1.9319x, max 2.2122x vs real reshape_and_cache path
 decode:  min 3.9782x, median 4.3409x, max 4.6780x vs real reshape_and_cache path
 
 CUDA Graph decode run:
-rows=8, correct=8/8
+rows=8, correct=8/8 for the flat-layout contract oracle
 CUDA Graph replay speedup: min 2.6659x, median 2.7713x, max 3.1179x
 
 RTX 3090 real-cache-writer CUDA Graph follow-up:

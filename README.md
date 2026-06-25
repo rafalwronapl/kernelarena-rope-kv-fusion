@@ -79,7 +79,7 @@ Original RTX 4090 contract-layout CUDA Graph decode benchmark:
 
 ```text
 rows=8
-correct=8/8
+correct=8/8 for the flat-layout contract oracle
 oracle: contract_oracle
 baseline: local RoPE reference + flat-layout contract write
 eager speedup: min 5.1667x, median 5.7302x, max 6.1404x

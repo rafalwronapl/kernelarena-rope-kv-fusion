@@ -89,7 +89,7 @@ Expected result shape:
 
 ```text
 rows=8
-correct=8/8
+correct=8/8 for the flat-layout contract oracle
 speedup_graph present for all rows
 ```
 
