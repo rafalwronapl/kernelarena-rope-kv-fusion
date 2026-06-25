@@ -1,0 +1,20 @@
+PROGRESS 1/16 6% fp16_prefill_contract_kv8_d128_b16 compiled_vs_local=4.095 vllm=n/a
+PROGRESS 2/16 12% fp16_prefill_fragmented_kv8_d128_b16 compiled_vs_local=4.164 vllm=n/a
+PROGRESS 3/16 19% fp16_prefill_contract_kv16_d128_b16 compiled_vs_local=4.036 vllm=n/a
+PROGRESS 4/16 25% fp16_prefill_fragmented_kv16_d128_b16 compiled_vs_local=4.061 vllm=n/a
+PROGRESS 5/16 31% bf16_prefill_contract_kv8_d128_b16 compiled_vs_local=4.054 vllm=n/a
+PROGRESS 6/16 38% bf16_prefill_fragmented_kv8_d128_b16 compiled_vs_local=4.064 vllm=n/a
+PROGRESS 7/16 44% bf16_prefill_contract_kv16_d128_b16 compiled_vs_local=4.064 vllm=n/a
+PROGRESS 8/16 50% bf16_prefill_fragmented_kv16_d128_b16 compiled_vs_local=4.066 vllm=n/a
+PROGRESS 9/16 56% fp16_decode_contract_batch1_kv8_d128_b16 compiled_vs_local=1.695 vllm=n/a
+PROGRESS 10/16 62% fp16_decode_contract_batch8_kv8_d128_b16 compiled_vs_local=1.487 vllm=n/a
+PROGRESS 11/16 69% fp16_decode_contract_batch32_kv8_d128_b16 compiled_vs_local=1.506 vllm=n/a
+PROGRESS 12/16 75% fp16_decode_contract_batch128_kv8_d128_b16 compiled_vs_local=1.491 vllm=n/a
+PROGRESS 13/16 81% bf16_decode_contract_batch1_kv8_d128_b16 compiled_vs_local=1.615 vllm=n/a
+PROGRESS 14/16 88% bf16_decode_contract_batch8_kv8_d128_b16 compiled_vs_local=1.479 vllm=n/a
+PROGRESS 15/16 94% bf16_decode_contract_batch32_kv8_d128_b16 compiled_vs_local=1.493 vllm=n/a
+PROGRESS 16/16 100% bf16_decode_contract_batch128_kv8_d128_b16 compiled_vs_local=1.514 vllm=n/a
+{
+  "output": "/workspace/kernelarena-rope-kv-fusion/artifacts/rope_provider_split_3090.json",
+  "rows": 16
+}

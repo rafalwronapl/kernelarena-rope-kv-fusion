@@ -1,0 +1,12 @@
+PROGRESS 1/8 12% fp16_decode_contract_batch1_kv8_d128_b16 eager=5.164x graph=3.271x oracle=real_vllm_oracle
+PROGRESS 2/8 25% fp16_decode_contract_batch8_kv8_d128_b16 eager=4.769x graph=4.059x oracle=real_vllm_oracle
+PROGRESS 3/8 38% fp16_decode_contract_batch32_kv8_d128_b16 eager=4.672x graph=4.738x oracle=real_vllm_oracle
+PROGRESS 4/8 50% fp16_decode_contract_batch128_kv8_d128_b16 eager=4.784x graph=3.032x oracle=real_vllm_oracle
+PROGRESS 5/8 62% bf16_decode_contract_batch1_kv8_d128_b16 eager=4.758x graph=5.013x oracle=real_vllm_oracle
+PROGRESS 6/8 75% bf16_decode_contract_batch8_kv8_d128_b16 eager=4.821x graph=4.801x oracle=real_vllm_oracle
+PROGRESS 7/8 88% bf16_decode_contract_batch32_kv8_d128_b16 eager=4.965x graph=4.882x oracle=real_vllm_oracle
+PROGRESS 8/8 100% bf16_decode_contract_batch128_kv8_d128_b16 eager=4.679x graph=3.053x oracle=real_vllm_oracle
+{
+  "output": "/workspace/kernelarena-rope-kv-fusion/artifacts/rope_real_vllm_cudagraph_decode_summary_3090.json",
+  "rows": 8
+}

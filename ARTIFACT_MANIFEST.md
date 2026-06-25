@@ -7,6 +7,8 @@ Documentation files and benchmark scripts at repository root are living document
 
 | SHA256 | Bytes | Path |
 | --- | ---: | --- |
+| `00643AB7DCC19B9D94A5076CE9B4B3B037A09AE3BD8404A965DCACFDB9B0AC4D` | 3908 | `artifacts/benchmark_rope_provider_split.py` |
+| `15E9E0C2FA9F80D1D82591574F5ADB39A0C71A17F7743FDD9D002930DB7E091F` | 6350 | `artifacts/benchmark_rope_real_vllm_cudagraph_decode.py` |
 | `0A477B0FC222FE3DE3DB427A4EF1710C0B90248385742EC0524CBC8F6A35DC2B` | 21485 | `artifacts/cudagraph_4090_benchmark_rope_cudagraph_decode.py` |
 | `39AD2413E35917393EEC718F06DF737CF86B1D81B3C1CD703354208C49FF85E1` | 1067 | `artifacts/cudagraph_4090_rope_cudagraph_decode_full.log` |
 | `073673829FBA2460502C0E2D739239F2DEBFCB6158CDD1D927486AE7EF300317` | 12545 | `artifacts/cudagraph_4090_rope_cudagraph_decode_smoke.json` |
@@ -20,10 +22,15 @@ Documentation files and benchmark scripts at repository root are living document
 | `39F4235E64D9CE306E8DEC23E12C34BE89F91B42AFB94BCDBA44445840589F42` | 23397 | `artifacts/real_vllm_4090_rope_real_vllm_contract_repeat3.json` |
 | `9802392211D8FFA5863DD0E1CE222AF4955B8A23D40A9AF9283182EDA35F3FC5` | 23397 | `artifacts/real_vllm_4090_rope_real_vllm_contract_smoke.json` |
 | `01E45FDBE7AC43816FA31244A311A080EF5319A3E2CADABBBAE2C26777E0F8D7` | 23396 | `artifacts/real_vllm_4090_rope_real_vllm_contract_summary.json` |
+| `A1E5DBCB2057084BA6E8B6B92D48819B251D8F19F28C7A316674B3C2A5079235` | 1000 | `artifacts/real_vllm_cudagraph_decode_full_3090.log` |
+| `37E26EC04F3063A97FD11E32003A987BD2E2E4529A0E5710450578072DE9BD6F` | 10329 | `artifacts/real_vllm_cudagraph_decode_smoke_3090.json` |
+| `4DB2BA7F18DE625C0B972CDEB3D74ECBA4ED70ACBFCCE14288D84E6D9D298384` | 10324 | `artifacts/real_vllm_cudagraph_decode_summary_3090.json` |
 | `12CB7F250821863CC627193A197A99CC72A6560CCD48EDBA573707D534BC5CA1` | 9170 | `artifacts/results_cudagraph_decode_4090_2026-06-25.zip` |
 | `B1DCE366B41D4DE325828A2DC69F508E262A069F005790EE574AD0DAE4CEEA48` | 17668 | `artifacts/results_real_vllm_contract_4090_2026-06-25.zip` |
 | `84326AFC1C3B8D28C156C3EFA1AC73457537C1C4832397A93715521F55B2DB60` | 1091 | `artifacts/rope_flashinfer_compare_4090_blocked.json` |
 | `3EADFBC73443E111FD042B7D731FD29D7433DBA013CDE04CF3B5E03537E62F6A` | 6269 | `artifacts/rope_flashinfer_compare_4090_results.tar.gz` |
+| `F9842E7AE6E88FDA0542B7215D0452EC56C8CD39395E7CDDF2A1808D1FA9C339` | 7185 | `artifacts/rope_provider_split_3090.json` |
+| `47A6768D5E2A3239C9A6FED98F6192F88F7D701E765D8FA0E70FF1DC59955010` | 1559 | `artifacts/rope_provider_split_3090.log` |
 | `5E130CE7D8F962F536C9E3AD7A58C80A2357D8BCA7D55CAA5539DDE9E5E3833E` | 18919 | `artifacts/rope_vllm_cache_contract_4090.json` |
 | `C703C8C6457A3DA8D256D50BA88BBFDA555B6E3C5D5417B279EB5EC0DB67DED6` | 3558 | `artifacts/rope_vllm_cache_contract_4090_repeat3_results.tar.gz` |
 | `6C50CB9929E6FC2F3D7ACFCA6B8CB47F888840E291F0773F46705B7A2CC21D6D` | 866 | `artifacts/rope_vllm_cache_contract_4090_repeat3_summary.json` |

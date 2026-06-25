@@ -27,15 +27,30 @@ decode:  min 3.9782x, median 4.3409x, max 4.6780x vs real reshape_and_cache path
 CUDA Graph decode run:
 rows=8, correct=8/8
 CUDA Graph replay speedup: min 2.6659x, median 2.7713x, max 3.1179x
+
+RTX 3090 real-cache-writer CUDA Graph follow-up:
+rows=8, correct=8/8
+baseline: local RoPE reference + real torch.ops._C_cache_ops.reshape_and_cache
+CUDA Graph replay speedup: min 3.0316x, median 4.3983x, max 5.0125x
+
+RTX 3090 RoPE-provider split:
+compiled_rope_ref vs local_rope_ref median: 2.8656x overall
+prefill median: 4.0641x
+decode median: 1.4994x
+vLLM RotaryEmbedding.forward_cuda: unavailable on this minimal install
 ```
 
-The CUDA Graph result is the important part: the decode improvement does not
-collapse to 1x when launch overhead is mostly removed.
+The first CUDA Graph result is a contract-layout check. The RTX 3090 follow-up
+uses real `reshape_and_cache`, which fixes that baseline mismatch for decode.
 
 Caveat: I only loaded the narrow vLLM CUDA extension path on the pod, not the
 full vLLM Python runtime dependency stack, so RoPE itself used a local reference
 fallback. The cache writer baseline is still the real vLLM CUDA op:
 `torch.ops._C_cache_ops.reshape_and_cache`.
+
+The remaining obvious follow-up is a full vLLM `RotaryEmbedding.forward_cuda`
+provider split or an in-vLLM integration test, because the prefill microbenchmark
+is clearly sensitive to RoPE provider choice.
 
 Artifacts and scripts are in:
 
