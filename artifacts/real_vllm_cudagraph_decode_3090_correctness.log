@@ -1,0 +1,12 @@
+PROGRESS 1/8 12% fp16_decode_contract_batch1_kv8_d128_b16 eager=6.545x graph=3.577x oracle=real_vllm_oracle
+PROGRESS 2/8 25% fp16_decode_contract_batch8_kv8_d128_b16 eager=4.994x graph=3.665x oracle=real_vllm_oracle
+PROGRESS 3/8 38% fp16_decode_contract_batch32_kv8_d128_b16 eager=4.862x graph=3.670x oracle=real_vllm_oracle
+PROGRESS 4/8 50% fp16_decode_contract_batch128_kv8_d128_b16 eager=4.924x graph=3.037x oracle=real_vllm_oracle
+PROGRESS 5/8 62% bf16_decode_contract_batch1_kv8_d128_b16 eager=4.900x graph=3.020x oracle=real_vllm_oracle
+PROGRESS 6/8 75% bf16_decode_contract_batch8_kv8_d128_b16 eager=4.893x graph=3.168x oracle=real_vllm_oracle
+PROGRESS 7/8 88% bf16_decode_contract_batch32_kv8_d128_b16 eager=4.943x graph=3.179x oracle=real_vllm_oracle
+PROGRESS 8/8 100% bf16_decode_contract_batch128_kv8_d128_b16 eager=4.992x graph=2.858x oracle=real_vllm_oracle
+{
+  "output": "/workspace/ka-rope/runpod_3090_rerun/real_vllm_cudagraph_decode_summary_3090_correctness.json",
+  "rows": 8
+}

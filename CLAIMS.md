@@ -38,15 +38,15 @@ rows.
 Allowed:
 
 ```text
-In the RTX 3090 real-cache-writer CUDA Graph decode timing benchmark, baseline
+In the RTX 3090 real-cache-writer CUDA Graph decode benchmark, baseline
 was local RoPE reference plus real `torch.ops._C_cache_ops.reshape_and_cache`;
-graph replay speedup was min 3.0316x, median 4.3983x, max 5.0125x across 8
-selected decode rows.
+graph replay speedup was min 2.8578x, median 3.1735x, max 3.6700x across 8/8
+correct selected decode rows.
 ```
 
-Required caveat: the first 3090 timing artifact does not contain cache
-correctness fields. Do not claim `correct=8/8` for that follow-up until rerun
-with the updated correctness-checking script.
+Required caveat: this is still a microbenchmark. The baseline cache writer is
+real vLLM `reshape_and_cache`, but RoPE is a local tensor reference rather than
+vLLM `RotaryEmbedding.forward_cuda`.
 
 Allowed:
 
@@ -96,20 +96,21 @@ showed 2.6659x-3.1179x speedup under graph replay. This CUDA Graph benchmark
 still uses `contract_oracle` / flat-layout contract write, not vLLM's real
 `reshape_and_cache` cache writer.
 
-The RTX 3090 follow-up fixes that baseline mismatch for decode timing: it uses
-real `torch.ops._C_cache_ops.reshape_and_cache` and still shows graph replay
-speedup from 3.0316x to 5.0125x. Its first artifact lacks correctness fields, so
-it is timing evidence pending rerun.
+The RTX 3090 follow-up fixes that baseline mismatch for decode: it uses real
+`torch.ops._C_cache_ops.reshape_and_cache` and shows graph replay speedup from
+2.8578x to 3.6700x across 8/8 correct selected rows. It also validates the
+baseline cache output, with `baseline_k_correct=8/8` and
+`baseline_v_correct=8/8`.
 
 Allowed wording:
 
 ```text
-The selected contract-layout decode microbenchmark retained about 2.7x-3.1x
-speedup under CUDA Graph replay.
+The selected real-cache-writer decode microbenchmark retained about 2.9x-3.7x
+speedup under CUDA Graph replay on RTX 3090 across 8/8 correct rows.
 ```
 
-Do not phrase this as an end-to-end serving speedup or as a CUDA Graph win
-against real vLLM `reshape_and_cache`.
+Do not phrase this as an end-to-end serving speedup or as a full vLLM runtime
+win.
 
 ## Outliers
 
@@ -132,7 +133,4 @@ Before strengthening the claim, run:
 - Full vLLM `RotaryEmbedding.forward_cuda` provider split. Current 3090 split
   measured local eager RoPE versus compiled RoPE; full vLLM Rotary import was
   unavailable on the minimal vLLM install.
-- Rerun RTX 3090 real-cache-writer CUDA Graph decode with the updated script so
-  the JSON includes `correct`, `k_correct`, `v_correct`, baseline correctness,
-  and max-diff fields.
 - End-to-end vLLM integration before any production-path claim.

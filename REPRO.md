@@ -111,7 +111,10 @@ Expected result shape:
 ```text
 rows=8
 oracle=real_vllm_oracle
-correct field present for each row
+correct=8/8
+baseline_k_correct=8/8
+baseline_v_correct=8/8
+k_max_abs_diff and v_max_abs_diff present for each row
 speedup_graph present for all rows
 ```
 
