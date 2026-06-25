@@ -53,7 +53,7 @@ except ModuleNotFoundError:
     HAS_VLLM = False
 
 
-REPO_ROOT = Path(__file__).resolve().parents[1]
+REPO_ROOT = Path(__file__).resolve().parent
 
 DTYPES = {"fp16": None, "bf16": None}
 if HAS_TORCH_TRITON:

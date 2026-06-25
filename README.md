@@ -3,7 +3,7 @@
 ```
 Status: narrow microbenchmark finding
 Scope:  NVIDIA RTX 4090, contract_oracle, selected layouts
-Not:    serving benchmark · production vLLM path · FlashInfer comparison
+Not:    serving benchmark | production vLLM path | FlashInfer comparison
 ```
 
 Date: 2026-06-24
@@ -35,6 +35,11 @@ torch: 2.7.0+cu126
 triton: 3.3.0
 oracle: contract_oracle
 ```
+
+**Important:** `oracle=contract_oracle` means the vLLM baseline uses vLLM's RoPE kernel
+followed by our own contract-compliant KV write, not vLLM's internal production cache
+writer. This is a deliberate scope choice and is not the same as benchmarking against
+vLLM's full cache path end-to-end.
 
 Single full run:
 
