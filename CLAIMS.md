@@ -13,15 +13,15 @@ Allowed:
 
 ```text
 On the recorded RTX 4090 contract benchmark, fused RoPE+KV-write beat decomposed
-vLLM RoPE + contract write with min 1.5198x and median 2.08085x on 16/16
-correct rows.
+vLLM RoPE + contract write for prefill cases with median 1.68x on 8/16 correct
+prefill rows. Robust median across all rows (excluding >5x outliers): 1.81x.
 ```
 
 Allowed:
 
 ```text
-Same-pod repeat stability showed 48/48 correct rows and min 1.5026x vs vLLM
-RoPE + contract write.
+Same-pod repeat stability showed 48/48 correct rows and prefill-robust median
+~1.68x vs vLLM RoPE + contract write.
 ```
 
 Allowed:
@@ -59,7 +59,21 @@ not production cache path
 not FlashInfer comparison
 ```
 
+## Decode Results
+
+Decode cases (1 token per sequence, small batch) show higher raw speedups
+but are kernel-launch-overhead dominated in eager mode. Under CUDA Graphs
+(production vLLM decode path) this overhead is amortized and these margins
+likely do not survive. Do not use decode numbers as headline claims.
+
 ## Outliers
 
 Outliers above `5x` in repeat rows are timing noise and must not be used as
 headline claims.
+
+## Clone Asymmetry
+
+The baseline calls k.clone() inside the timed loop because vLLM's forward_cuda
+modifies k in-place. The fused kernel reads k without cloning. This adds ~1-2%
+overhead to baseline for prefill. Results are labeled contract_oracle to reflect
+this methodological caveat.
