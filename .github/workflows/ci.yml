@@ -1,0 +1,23 @@
+name: artifact-validation
+
+on:
+  push:
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-python@v7
+        with:
+          python-version: "3.11"
+      - name: Validate recorded evidence
+        run: python validate_artifacts.py
+      - name: Run CPU-only tests
+        run: python -m unittest discover -s tests -v
+      - name: Build dashboard smoke test
+        run: python build_dashboard.py --out-dir /tmp/kernel-dashboard

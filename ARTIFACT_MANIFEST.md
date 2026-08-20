@@ -44,9 +44,9 @@ Generated locally. SHA256 hashes are for repository files and benchmark artifact
 | `benchmark_rope_real_vllm_contract.py` | 26515 | `5d85f62f4e8ccf1f1182e150d829a207c9934c8db271fe3a62d02d58717a2ba9` |
 | `benchmark_rope_real_vllm_cudagraph_decode.py` | 11250 | `6607e4f4ea48d1c369b8b5ecb38b7ff924bc12e1775eac8a4637928046c75558` |
 | `benchmark_rope_vllm_cache_contract.py` | 19510 | `e85f6eb5212d4486cc37ebcff7c0c568d0eb7d2edcccf149f58b2df1d36004dd` |
-| `CLAIMS.md` | 4503 | `7e1f69867b52d16d6eb9a4bb78d9106d6439617c9d54edcd279c0b4efd59ee6d` |
-| `LICENSE` | 8901 | `3f1914f1c5f30b762dfb64ed88b9411a9b5a813c5bb84d9d8309344ebacce506` |
-| `README.md` | 7592 | `7427c14a647bba6ab85181dba4d4d76859a18e1e99849845decfb610a6e97604` |
-| `REPRO.md` | 3373 | `a955ec108ea7a9a5bf6829ed920905672a4352cee9af80062c3d2fd51f9a7230` |
+| `CLAIMS.md` | 4432 | `9413b9129f37fa272ce6653d15ffcf2649e410a69fa8801e33ee2e130beeea26` |
+| `LICENSE` | 11357 | `c71d239df91726fc519c6eb72d318ec65820627232b2f796219e87dcf35d0ab4` |
+| `README.md` | 8471 | `0e00f8a404bacb66bc4675331b242999b97f4b93d321caa5c47946f53bcf47ca` |
+| `REPRO.md` | 3306 | `1c4f5788c0e74f2af4c6ee4f7fee024126d4d514c1f624a745d622221f8024d4` |
 | `requirements.txt` | 164 | `c26ede4fd29788daf250812aa90261304b5ff40361268b0a62fd83205c937724` |
-| `VLLM_ISSUE_COMMENT.md` | 2601 | `3c60d28887746601e999516fca0c3345af9df533cea444db8f3db582534c93cc` |
+| `VLLM_ISSUE_COMMENT.md` | 2562 | `320f708b855830c5e0976d5bd50da65f3709544ac2f33ac82407e696876fa8d4` |

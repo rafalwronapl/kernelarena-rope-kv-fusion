@@ -1,5 +1,11 @@
 # KernelArena Finding: RoPE + KV-Cache Write Fusion v1
 
+[![Artifact validation](https://github.com/rafalwronapl/kernelarena-rope-kv-fusion/actions/workflows/ci.yml/badge.svg)](https://github.com/rafalwronapl/kernelarena-rope-kv-fusion/actions/workflows/ci.yml)
+[![Evidence explorer](https://img.shields.io/badge/live-evidence_explorer-ff7a3d.svg)](https://rafalwronapl.github.io/kernelarena-rope-kv-fusion/)
+
+Live row-level evidence explorer:
+https://rafalwronapl.github.io/kernelarena-rope-kv-fusion/
+
 ```text
 Status: narrow microbenchmark finding
 Scope:  NVIDIA RTX 4090/3090, selected vLLM paged-cache layouts
@@ -31,6 +37,22 @@ we added a second RTX 3090 CUDA Graph decode benchmark that also uses real
 
 This is still a microbenchmark finding. It is not an end-to-end vLLM serving
 benchmark, not an official TritonBench result, and not a FlashInfer comparison.
+
+## CPU-Only Artifact Validation
+
+The recorded evidence can be checked without a GPU:
+
+```bash
+python validate_artifacts.py
+python -m unittest discover -s tests -v
+python build_dashboard.py --out-dir docs
+```
+
+The validator checks manifest sizes and SHA256 hashes using canonical LF line
+endings, parses the claimed JSON summaries, verifies expected row counts,
+correctness flags, real-cache-writer baseline labels, and positive speedup
+fields. This validates the stored artifact bundle; it does not rerun CUDA or
+certify an end-to-end serving result.
 
 ## Main Result: Real vLLM Cache Writer
 
